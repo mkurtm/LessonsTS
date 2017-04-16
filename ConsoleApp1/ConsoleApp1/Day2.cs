@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    class Day1 : Lesson
+    class Day2 : Lesson
     {
-        public Day1()
+        public Day2()
         {
             numberOfDay = 1;
             numberOfTasks = 5;

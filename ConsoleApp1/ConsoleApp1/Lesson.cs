@@ -10,13 +10,13 @@ namespace ConsoleApp1
     class Lesson
     {
         /* Базовый класс для всех уроков */
-        public int numberOfDay, numberOfTasks, numberOfDays = 1;
+        public int numberOfDay, numberOfTasks, numberOfDays = 2;
         public string description;
         public List<string> lessonsDescription = new List<string>();
 
         public Lesson()
         {
-            InitData();  
+            
         }
 
         public void WelcomeDay()
@@ -32,22 +32,12 @@ namespace ConsoleApp1
             
         }
         
-        public virtual void InitData()
-        {
-
-        }
-
         public int NavigateDay()
         {
             Console.Clear();
             Console.WriteLine("Инициализация программы.\nВыберите номер учебного дня (от 1 до {0}) и нажмите ENTER.\nДля выхода из программы введите 9.", numberOfDays);
             int value = GetValue();
             return value;
-        }
-
-        public virtual void NavigateTask()
-        {
-
         }
 
         public int GetValue()
@@ -77,6 +67,69 @@ namespace ConsoleApp1
         {
             Console.WriteLine("Вы ввели не число или не попали в диапазон, повторите ввод.");
             Thread.Sleep(2000);
+        }
+
+        public virtual void NavigateTask()
+        {
+            int value;
+            do
+            {
+                WelcomeDay();
+                Console.WriteLine("Выберите номер Задания (от 1 до {0}) и нажмите ENTER.\nДля возврата на выбор Дня введите 9.", numberOfTasks);
+                value = GetValue();
+                switch (value)
+                {
+                    case 1:
+                        Task1();
+                        break;
+                    case 2:
+                        Task2();
+                        break;
+                    case 3:
+                        Task3();
+                        break;
+                    case 4:
+                        Task4();
+                        break;
+                    case 5:
+                        Task5();
+                        break;
+                    case 9:
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        WrongEnter();
+                        break;
+                }
+            } while (value != 9);
+        }
+
+        public virtual void Task1()
+        {
+            
+        }
+
+        public virtual void Task2()
+        {
+            
+        }
+
+        public virtual void Task3()
+        {
+           
+
+        }
+
+        public virtual void Task4()
+        {
+            
+
+        }
+
+        public virtual void Task5()
+        {
+           
         }
     }
 }

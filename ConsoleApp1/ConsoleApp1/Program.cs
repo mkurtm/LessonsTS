@@ -23,8 +23,7 @@ namespace ConsoleApp1
                     case 0:
                         break;
                     default:
-                        l.WrongEnter();
-                        Main();
+                        l.WrongEnter();                        
                         break;
                 }
             } while (day!=9);

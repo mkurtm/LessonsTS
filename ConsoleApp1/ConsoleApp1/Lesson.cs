@@ -31,8 +31,7 @@ namespace ConsoleApp1
             Thread.Sleep(1000);
             
         }
-
-
+        
         public virtual void InitData()
         {
 

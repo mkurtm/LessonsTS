@@ -61,7 +61,7 @@ namespace ConsoleApp1
             } while (value!=9);
         }
 
-        public void Task1()
+        void Task1()
         {
             int whilecount = 0;
             do
@@ -85,7 +85,7 @@ namespace ConsoleApp1
             NextLesson();
         }
 
-        public void Task2()
+        void Task2()
         {
             int number;
 
@@ -101,7 +101,7 @@ namespace ConsoleApp1
             NextLesson();
         }
 
-        public void Task3()
+        void Task3()
         {
             Console.WriteLine("Введите количество чисел Фибоначчи для вывода:");
             int value = GetValue();
@@ -131,7 +131,7 @@ namespace ConsoleApp1
 
         }
 
-        public void Task4()
+        void Task4()
         {
             Console.WriteLine("Введите целое положительное число и мы найдем сумму его цифр:");
             int value = GetValue();
@@ -152,7 +152,7 @@ namespace ConsoleApp1
 
         }
 
-        public void Task5()
+        void Task5()
         {
             Console.WriteLine("Введите целое положительное число и мы скажем простое ли оно:");
             int numSimple = GetValue();

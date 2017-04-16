@@ -6,221 +6,29 @@ namespace ConsoleApp1
 {
     class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            Program lessons = new Program();
-            lessons.LessonEnter();
-
-            
-        }
-
-        public void FirstLesson()
-        {
-            int whilecount = 0;
+            int day;
+            Lesson l = new Lesson();            
             do
             {
-                Console.WriteLine("Это цикл DO WHILE, {0}", whilecount);
-                whilecount++;
-            } while (whilecount < 10);
-
-            whilecount = 0;
-
-            while (whilecount < 10)
-            {
-                Console.WriteLine("Это цикл WHILE, {0}", whilecount);
-                whilecount++;
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine("Это цикл for, {0}", i);
-            }
-
-            NextLesson();
-
-        }
-
-        public void SecondLesson()
-        {
-            
-            int number;
-
-            for (int i = 0; i < 100; i++)
-            {
-                number = i % 2;
-                if (number == 0)
+                day = l.NavigateDay();
+                switch (day)
                 {
-                    Console.WriteLine("Четное число: {0}", i);
+                    case 1:
+                        l = new Day1();
+                        break;
+                    case 9:
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        l.WrongEnter();
+                        Main();
+                        break;
                 }
-            }
+            } while (day!=9);
 
-            NextLesson();
-            
-        }
-
-        public void ThirdLesson()
-        {
-           
-            int numFib;
-            Console.WriteLine("Введите количество чисел Фибоначчи для вывода:");
-            try
-            {
-                numFib = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                numFib = 1;
-                WrongEnter();
-            }
-
-            Console.WriteLine("Решение с помощью всего трех переменных, без памяти.");
-            int firstFib = 1, secondFib = 0, buffer;
-            for (int i = 0; i < numFib; i++)
-            {
-                Console.WriteLine("{0} число Фибоначчи: {1}", i + 1, secondFib);
-                buffer = firstFib + secondFib;
-                firstFib = secondFib;
-                secondFib = buffer;
-            }
-
-            Console.WriteLine("Решение с помощью списка значений, с памятью.");
-            List<int> fibList = new List<int> { 0, 1 };
-            for (int i = 0; i < numFib; i++)
-            {
-                Console.WriteLine("{0} число Фибоначчи: {1}", i + 1, fibList[i]);
-                if (i != 0)
-                {
-                    fibList.Add(fibList[i] + fibList[i - 1]);
-                }
-            }
-
-            NextLesson();
-
-        }
-
-        public void FourthLesson()
-        {
-            
-            int numSum;
-            Console.WriteLine("Введите целое положительное число и мы найдем сумму его цифр:");
-
-            try
-            {
-                numSum = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                numSum = 1;
-                WrongEnter();
-
-            }
-
-            int sum = 0, grade = 0, rest = 0;
-
-            do
-            {
-                rest = numSum % 10;
-                sum += rest;
-                grade = numSum / 10;
-                numSum = grade;
-            } while (grade >= 1);
-
-            Console.WriteLine("Сумма цифр равна: {0}", sum);
-
-            NextLesson();
-
-        }
-
-        public void FifthLesson()
-        {
-            
-            int numSimple;
-            Console.WriteLine("Введите целое положительное число и мы скажем простое ли оно:");
-
-            try
-            {
-                numSimple = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                WrongEnter();
-                numSimple = 1;
-            }
-
-            int rest, flagSimple = 0;
-            for (int i = 1; i <= numSimple; i++)
-            {
-                rest = numSimple % i;
-                if (rest == 0)
-                {
-                    flagSimple++;
-                }
-            }
-            if (flagSimple == 2)
-            {
-                Console.WriteLine("Ваше число: {0} является простым.", numSimple);
-            }
-            else
-            {
-                Console.WriteLine("Ваше число: {0} НЕ является простым.", numSimple);
-            }
-
-            NextLesson();            
-        }
-
-        //public void NextLesson()
-        //{
-        //    Thread.Sleep(1000);
-        //    Console.WriteLine("Конец урока, нажмите enter для перехода на следующий урок.");
-        //    Console.ReadLine();
-        //    Console.Clear();
-        //    LessonEnter();
-        //}
-
-        public void LessonEnter()
-        {
-            Console.Clear();
-            Console.WriteLine("Инициализация программы. Выберите номер урока 1-5 и нажмите ENTER.");
-            int LessonNumber;
-            try
-            {
-                LessonNumber = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                LessonNumber = 10;
-                WrongEnter();
-            }
-
-            switch (LessonNumber)
-            {
-                case 1:
-                    FirstLesson();
-                    break;
-                case 2:
-                    SecondLesson();
-                    break;
-                case 3:
-                    ThirdLesson();
-                    break;
-                case 4:
-                    FourthLesson();
-                    break;
-                case 5:
-                    FifthLesson();
-                    break;
-                default:
-                    LessonEnter();
-                    break;
-            }
-
-        }
-
-        public void WrongEnter()
-        {
-            Console.WriteLine("Вы ввели не число, повторите ввод.");
-            Thread.Sleep(2000);
-            LessonEnter();
         }
     }
 }

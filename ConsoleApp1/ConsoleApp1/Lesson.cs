@@ -10,17 +10,43 @@ namespace ConsoleApp1
     class Lesson
     {
         /* Базовый класс для всех уроков */
-
-        public int number, numberoftasks;
+        public int numberOfDay, numberOfTasks, numberOfDays = 1;
         public string description;
-        public List<string> lessonsDescription;
+        public List<string> lessonsDescription = new List<string>();
 
-        public virtual void Execution()
+        public Lesson()
+        {
+            InitData();  
+        }
+
+        public void WelcomeDay()
+        {
+            Console.Clear();
+            Console.WriteLine("Добро пожаловать в День №{0}.\nТема: {1}.\nСегодня было решено {2} задач:", numberOfDay, description, numberOfTasks);
+            foreach (string item in lessonsDescription)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
+            Thread.Sleep(1000);
+            
+        }
+
+
+        public virtual void InitData()
         {
 
         }
 
-        public virtual void Navigate()
+        public int NavigateDay()
+        {
+            Console.Clear();
+            Console.WriteLine("Инициализация программы.\nВыберите номер учебного дня (от 1 до {0}) и нажмите ENTER.\nДля выхода из программы введите 9.", numberOfDays);
+            int value = GetValue();
+            return value;
+        }
+
+        public virtual void NavigateTask()
         {
 
         }
@@ -50,7 +76,7 @@ namespace ConsoleApp1
 
         public void WrongEnter()
         {
-            Console.WriteLine("Вы ввели не число, повторите ввод.");
+            Console.WriteLine("Вы ввели не число или не попали в диапазон, повторите ввод.");
             Thread.Sleep(2000);
         }
     }

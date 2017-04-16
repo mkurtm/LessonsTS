@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
@@ -13,12 +10,12 @@ namespace ConsoleApp1
         {
             Program lessons = new Program();
             lessons.LessonEnter();
+
+            
         }
 
         public void FirstLesson()
         {
-            #region Задание №1. Циклы.
-
             int whilecount = 0;
             do
             {
@@ -41,13 +38,11 @@ namespace ConsoleApp1
 
             NextLesson();
 
-            #endregion
         }
 
         public void SecondLesson()
         {
-            #region Задание №2. Остаток от деления %.
-
+            
             int number;
 
             for (int i = 0; i < 100; i++)
@@ -60,14 +55,12 @@ namespace ConsoleApp1
             }
 
             NextLesson();
-
-            #endregion
+            
         }
 
         public void ThirdLesson()
         {
-            #region Задание №3. Числа Фибоначчи.
-
+           
             int numFib;
             Console.WriteLine("Введите количество чисел Фибоначчи для вывода:");
             try
@@ -103,13 +96,11 @@ namespace ConsoleApp1
 
             NextLesson();
 
-            #endregion
         }
 
         public void FourthLesson()
         {
-            #region Задание №4. Найти сумму цифр положительного числа. 
-
+            
             int numSum;
             Console.WriteLine("Введите целое положительное число и мы найдем сумму его цифр:");
 
@@ -138,13 +129,11 @@ namespace ConsoleApp1
 
             NextLesson();
 
-            #endregion
         }
 
         public void FifthLesson()
         {
-            #region Задание №5. Простое ли число?
-
+            
             int numSimple;
             Console.WriteLine("Введите целое положительное число и мы скажем простое ли оно:");
 
@@ -176,19 +165,17 @@ namespace ConsoleApp1
                 Console.WriteLine("Ваше число: {0} НЕ является простым.", numSimple);
             }
 
-            NextLesson();
-
-            #endregion
+            NextLesson();            
         }
 
-        public void NextLesson()
-        {
-            Thread.Sleep(1000);
-            Console.WriteLine("Конец урока, нажмите enter для перехода на следующий урок.");
-            Console.ReadLine();
-            Console.Clear();
-            LessonEnter();
-        }
+        //public void NextLesson()
+        //{
+        //    Thread.Sleep(1000);
+        //    Console.WriteLine("Конец урока, нажмите enter для перехода на следующий урок.");
+        //    Console.ReadLine();
+        //    Console.Clear();
+        //    LessonEnter();
+        //}
 
         public void LessonEnter()
         {
@@ -229,7 +216,7 @@ namespace ConsoleApp1
 
         }
 
-        private void WrongEnter()
+        public void WrongEnter()
         {
             Console.WriteLine("Вы ввели не число, повторите ввод.");
             Thread.Sleep(2000);

@@ -1,62 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
     class Program
     {
-
-        static void Main(string[] args)
+        public static void Main()
         {
-            #region Задание №1. Циклы.
-
-            int whilecount = 0;
+            int day;
+            Lesson l = new Lesson();            
             do
             {
-                Console.WriteLine("Это цикл DO WHILE, {0}", whilecount);
-                whilecount++;
-            } while (whilecount < 10);
-
-            whilecount = 0;
-
-            while (whilecount < 10)
-            {
-                Console.WriteLine("Это цикл WHILE, {0}", whilecount);
-                whilecount++;
-            }
-
-            for (int i = 0; i < 10; i++)
-            {
-                Console.WriteLine("Это цикл for, {0}", i);
-            }
-
-            Thread.Sleep(2000);
-
-            #endregion
-
-            #region Задание №2. Остаток от деления %.
-
-            int number;
-
-            for (int i = 0; i < 100; i++)
-            {
-                number = i % 2;
-                if (number == 0)
+                day = l.NavigateDay();
+                switch (day)
                 {
-                    Console.WriteLine("Четное число: {0}", i);
-                    Thread.Sleep(500);
+                    case 1:
+                        l = new Day1();
+                        break;
+                    case 2:
+                        l = new Day2();
+                        break;
+                    case 9:
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        l.WrongEnter();                        
+                        break;
                 }
-            }
+            } while (day!=9);
 
-            #endregion
-
-
-
-            Console.ReadLine();
         }
     }
 }

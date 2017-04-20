@@ -4,29 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace Day_2_Lessons_Scratch
 {
-    class Day2 : Lesson
+    class Program
     {
-        public Day2()
+        static void Main()
         {
-            numberOfDay = 2;
-            numberOfTasks = 6;
-            description = "Работа с массивами и списками.";
-            lessonsDescription = new List<string>
-            {
-                @"Задание №1. Массив и простейшие операции.",
-                @"Задание №2. Список и вставка элемента.",
-                @"Задание №3. Список и удаление элемента.",
-                @"Задание №4. Массив и поиск максимума и минимума.",
-                @"Задание №5. Меняем местами четные и нечетные элементы в списке.",
-                @"Задание №6. Сортируем двумерный массив."
-            };
+            
+            Console.ReadLine();
 
-            NavigateTask();
         }
 
-        public override void Task1()
+        public void Task1()
         {
             int[,] arr = new int[10, 10];
             Random rand = new Random();
@@ -58,11 +47,9 @@ namespace ConsoleApp1
 
             Console.WriteLine("Сумма элементов пятой строки: {0}", sum5);
             Console.WriteLine("Сумма элементов на диагонали: {0}", diag);
-
-            NextLesson();
         }
 
-        public override void Task2()
+        public void Task2()
         {
             List<int> myList = new List<int>(15);
             Random rand = new Random();
@@ -89,12 +76,9 @@ namespace ConsoleApp1
             {
                 Console.Write(" " + item);
             }
-            Console.WriteLine();
-
-            NextLesson();
         }
 
-        public override void Task3()
+        public void Task3()
         {
             List<int> myList = new List<int>(15);
             Random rand = new Random();
@@ -121,12 +105,9 @@ namespace ConsoleApp1
             {
                 Console.Write(" " + item);
             }
-            Console.WriteLine();
-
-            NextLesson();
         }
 
-        public override void Task4()
+        public void Task4()
         {
             int[,] arr = new int[10, 10];
             Random rand = new Random();
@@ -160,11 +141,9 @@ namespace ConsoleApp1
             Console.WriteLine("Наибольший элемент массива: {0}, расположен по адресу: [{1},{2}].", max, maxx, maxy);
             Console.WriteLine("Наименьший элемент массива: {0}, расположен по адресу: [{1},{2}].", min, minx, miny);
             Console.WriteLine("Сумма элементов равна: {0}.", max + min);
-
-            NextLesson();
         }
 
-        public override void Task5()
+        public void Task5()
         {
             //инициализируем переменные
             List<int> list = new List<int>(10);
@@ -195,12 +174,9 @@ namespace ConsoleApp1
             {
                 Console.Write(" " + item);
             }
-            Console.WriteLine();
-
-            NextLesson();
         }
 
-        public override void Task6()
+        public void Task6()
         {
             //инициализируем переменные
             int[,] arr = new int[10, 10];
@@ -261,8 +237,6 @@ namespace ConsoleApp1
                 }
                 Console.WriteLine();
             }
-
-            NextLesson();
         }
     }
 }

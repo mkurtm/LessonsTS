@@ -11,10 +11,6 @@ namespace Day_2_Lessons_Scratch
         static void Main()
         {
             
-
-
-
-
             Console.ReadLine();
 
         }
@@ -149,12 +145,98 @@ namespace Day_2_Lessons_Scratch
 
         public void Task5()
         {
+            //инициализируем переменные
+            List<int> list = new List<int>(10);
+            Random rand = new Random();
+            int buffer;
 
+            //заполняем список произвольными значениями
+            Console.WriteLine("Первоначальный список:");
+            for (int i = 0; i < 10; i++)
+            {
+                list.Add(rand.Next(10));
+                Console.Write(" " + list[i]);
+            }
+
+            //меняем местами четные и нечетные элементы
+            for (int i = 0; i < 10; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    buffer = list[i + 1];
+                    list[i + 1] = list[i];
+                    list[i] = buffer;
+                }
+            }
+
+            Console.WriteLine("\nКонечный список:");
+            foreach (var item in list)
+            {
+                Console.Write(" " + item);
+            }
         }
 
         public void Task6()
         {
+            //инициализируем переменные
+            int[,] arr = new int[10, 10];
+            Random rand = new Random();
+            int buffer;
+            int isSorted = 0;
 
+            //заполняем произвольными
+            Console.WriteLine("Первоначальный массив:");
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    arr[x, y] = rand.Next(100);
+                    Console.Write(" " + arr[x, y]);
+                }
+                Console.WriteLine();
+            }
+
+            //проводим построчную сортировку
+            do
+            {
+                isSorted = 0;
+                for (int x = 0; x < 10; x++)
+                {
+                    for (int y = 0; y < 10; y++)
+                    {
+                        if (y != 0)
+                        {
+                            if (arr[x, y] < arr[x, y - 1])
+                            {
+                                buffer = arr[x, y - 1];
+                                arr[x, y - 1] = arr[x, y];
+                                arr[x, y] = buffer;
+                                isSorted++;
+                            }
+                        }
+                        if (x != 0 && y == 0)
+                        {
+                            if (arr[x, y] < arr[x - 1, 9])
+                            {
+                                buffer = arr[x - 1, 9];
+                                arr[x - 1, 9] = arr[x, y];
+                                arr[x, y] = buffer;
+                                isSorted++;
+                            }
+                        }
+                    }
+                }
+            } while (isSorted != 0);
+
+            Console.WriteLine("Конечный массив:");
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    Console.Write(" " + arr[x, y]);
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

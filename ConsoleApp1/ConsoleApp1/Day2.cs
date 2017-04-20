@@ -10,133 +10,256 @@ namespace ConsoleApp1
     {
         public Day2()
         {
-            numberOfDay = 1;
-            numberOfTasks = 5;
-            description = "Работа с простейшими циклами и операторами C#";
+            numberOfDay = 2;
+            numberOfTasks = 6;
+            description = "Работа с массивами и списками.";
             lessonsDescription = new List<string>
             {
-                @"Задание №1. Циклы.",
-                @"Задание №2. Остаток от деления %.",
-                @"Задание №3. Числа Фибоначчи.",
-                @"Задание №4. Найти сумму цифр положительного числа.",
-                @"Задание №5. Простое ли число?"
+                @"Задание №1. Массив и простейшие операции.",
+                @"Задание №2. Список и вставка элемента.",
+                @"Задание №3. Список и удаление элемента.",
+                @"Задание №4. Массив и поиск максимума и минимума.",
+                @"Задание №5. Меняем местами четные и нечетные элементы в списке.",
+                @"Задание №6. Сортируем двумерный массив."
             };
 
             NavigateTask();
         }
-        
+
         public override void Task1()
         {
-            int whilecount = 0;
-            do
-            {
-                Console.WriteLine("Это цикл DO WHILE, {0}", whilecount);
-                whilecount++;
-            } while (whilecount < 10);
+            int[,] arr = new int[10, 10];
+            Random rand = new Random();
+            int sum5 = 0;
+            int diag = 0;
 
-            whilecount = 0;
-            while (whilecount < 10)
+            //Заполняем и сразу выводим массив
+            for (int x = 0; x < 10; x++)
             {
-                Console.WriteLine("Это цикл WHILE, {0}", whilecount);
-                whilecount++;
+                for (int y = 0; y < 10; y++)
+                {
+                    arr[x, y] = rand.Next(10);
+                    Console.Write(" " + arr[x, y]);
+
+                    // Если 5 строка, то сразу находим сумму
+                    if (x == 4)
+                    {
+                        sum5 += arr[x, y];
+                    }
+
+                    //Если элемент лежит на диагонали, то сразу находим сумму
+                    if (x == y)
+                    {
+                        diag += arr[x, y];
+                    }
+                }
+                Console.WriteLine();
             }
 
-            for (whilecount = 0; whilecount < 10; whilecount++)
-            {
-                Console.WriteLine("Это цикл for, {0}", whilecount);
-            }
+            Console.WriteLine("Сумма элементов пятой строки: {0}", sum5);
+            Console.WriteLine("Сумма элементов на диагонали: {0}", diag);
 
             NextLesson();
         }
 
         public override void Task2()
         {
-            int number;
+            List<int> myList = new List<int>(15);
+            Random rand = new Random();
 
-            for (int i = 0; i < 100; i++)
+            Console.WriteLine("Первоначальный список:");
+
+            for (int i = 0; i < 15; i++)
             {
-                number = i % 2;
-                if (number == 0)
+                myList.Add(rand.Next(10));
+                Console.Write(" " + myList[i]);
+            }
+
+            //Вставляем 333 в каждую третью ячейку списка.
+            for (int i = 0; i < myList.Count; i++)
+            {
+                if (i % 3 == 0)
                 {
-                    Console.WriteLine("Четное число: {0}", i);
+                    myList.Insert(i, 333);
                 }
             }
+
+            Console.WriteLine("\nКонечный список:");
+            foreach (var item in myList)
+            {
+                Console.Write(" " + item);
+            }
+            Console.WriteLine();
 
             NextLesson();
         }
 
         public override void Task3()
         {
-            Console.WriteLine("Введите количество чисел Фибоначчи для вывода:");
-            int value = GetValue();
+            List<int> myList = new List<int>(15);
+            Random rand = new Random();
 
-            Console.WriteLine("Решение с помощью всего трех переменных, без памяти.");
-            int firstFib = 1, secondFib = 0, buffer;
-            for (int i = 0; i < value; i++)
+            Console.WriteLine("Первоначальный список:");
+
+            for (int i = 0; i < 15; i++)
             {
-                Console.WriteLine("{0} число Фибоначчи: {1}", i + 1, secondFib);
-                buffer = firstFib + secondFib;
-                firstFib = secondFib;
-                secondFib = buffer;
+                myList.Add(rand.Next(10));
+                Console.Write(" " + myList[i]);
             }
 
-            Console.WriteLine("Решение с помощью списка значений, с памятью.");
-            List<int> fibList = new List<int> { 0, 1 };
-            for (int i = 0; i < value; i++)
+            //Удаляем третью ячейку списка.
+            for (int i = 0; i < myList.Count; i++)
             {
-                Console.WriteLine("{0} число Фибоначчи: {1}", i + 1, fibList[i]);
-                if (i != 0)
+                if (i % 3 == 0)
                 {
-                    fibList.Add(fibList[i] + fibList[i - 1]);
+                    myList.RemoveAt(i);
                 }
             }
 
-            NextLesson();
+            Console.WriteLine("\nКонечный список:");
+            foreach (var item in myList)
+            {
+                Console.Write(" " + item);
+            }
+            Console.WriteLine();
 
+            NextLesson();
         }
 
         public override void Task4()
         {
-            Console.WriteLine("Введите целое положительное число и мы найдем сумму его цифр:");
-            int value = GetValue();
+            int[,] arr = new int[10, 10];
+            Random rand = new Random();
+            int max = 0, min = 100, maxx = 0, maxy = 0, minx = 0, miny = 0;
 
-            int sum = 0, grade = 0, rest = 0;
-
-            do
+            //Заполняем и сразу выводим массив
+            for (int x = 0; x < 10; x++)
             {
-                rest = value % 10;
-                sum += rest;
-                grade = value / 10;
-                value = grade;
-            } while (grade >= 1);
+                for (int y = 0; y < 10; y++)
+                {
+                    arr[x, y] = rand.Next(100);
+                    Console.Write(" " + arr[x, y]);
 
-            Console.WriteLine("Сумма цифр равна: {0}", sum);
+                    if (arr[x, y] > max)
+                    {
+                        max = arr[x, y];
+                        maxx = x;
+                        maxy = y;
+                    }
+
+                    if (arr[x, y] < min)
+                    {
+                        min = arr[x, y];
+                        minx = x;
+                        miny = y;
+                    }
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Наибольший элемент массива: {0}, расположен по адресу: [{1},{2}].", max, maxx, maxy);
+            Console.WriteLine("Наименьший элемент массива: {0}, расположен по адресу: [{1},{2}].", min, minx, miny);
+            Console.WriteLine("Сумма элементов равна: {0}.", max + min);
 
             NextLesson();
-
         }
 
         public override void Task5()
         {
-            Console.WriteLine("Введите целое положительное число и мы скажем простое ли оно:");
-            int numSimple = GetValue();
+            //инициализируем переменные
+            List<int> list = new List<int>(10);
+            Random rand = new Random();
+            int buffer;
 
-            int rest, flagSimple = 0;
-            for (int i = 1; i <= numSimple; i++)
+            //заполняем список произвольными значениями
+            Console.WriteLine("Первоначальный список:");
+            for (int i = 0; i < 10; i++)
             {
-                rest = numSimple % i;
-                if (rest == 0)
+                list.Add(rand.Next(10));
+                Console.Write(" " + list[i]);
+            }
+
+            //меняем местами четные и нечетные элементы
+            for (int i = 0; i < 10; i++)
+            {
+                if (i % 2 == 0)
                 {
-                    flagSimple++;
+                    buffer = list[i + 1];
+                    list[i + 1] = list[i];
+                    list[i] = buffer;
                 }
             }
-            if (flagSimple == 2)
+
+            Console.WriteLine("\nКонечный список:");
+            foreach (var item in list)
             {
-                Console.WriteLine("Ваше число: {0} является простым.", numSimple);
+                Console.Write(" " + item);
             }
-            else
+            Console.WriteLine();
+
+            NextLesson();
+        }
+
+        public override void Task6()
+        {
+            //инициализируем переменные
+            int[,] arr = new int[10, 10];
+            Random rand = new Random();
+            int buffer;
+            int isSorted = 0;
+
+            //заполняем произвольными
+            Console.WriteLine("Первоначальный массив:");
+            for (int x = 0; x < 10; x++)
             {
-                Console.WriteLine("Ваше число: {0} НЕ является простым.", numSimple);
+                for (int y = 0; y < 10; y++)
+                {
+                    arr[x, y] = rand.Next(100);
+                    Console.Write(" " + arr[x, y]);
+                }
+                Console.WriteLine();
+            }
+
+            //проводим построчную сортировку
+            do
+            {
+                isSorted = 0;
+                for (int x = 0; x < 10; x++)
+                {
+                    for (int y = 0; y < 10; y++)
+                    {
+                        if (y != 0)
+                        {
+                            if (arr[x, y] < arr[x, y - 1])
+                            {
+                                buffer = arr[x, y - 1];
+                                arr[x, y - 1] = arr[x, y];
+                                arr[x, y] = buffer;
+                                isSorted++;
+                            }
+                        }
+                        if (x != 0 && y == 0)
+                        {
+                            if (arr[x, y] < arr[x - 1, 9])
+                            {
+                                buffer = arr[x - 1, 9];
+                                arr[x - 1, 9] = arr[x, y];
+                                arr[x, y] = buffer;
+                                isSorted++;
+                            }
+                        }
+                    }
+                }
+            } while (isSorted != 0);
+
+            Console.WriteLine("Конечный массив:");
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
+                {
+                    Console.Write(" " + arr[x, y]);
+                }
+                Console.WriteLine();
             }
 
             NextLesson();

@@ -35,7 +35,7 @@ namespace ConsoleApp1
         public int NavigateDay()
         {
             Console.Clear();
-            Console.WriteLine("Инициализация программы.\nВыберите номер учебного дня (от 1 до {0}) и нажмите ENTER.\nДля выхода из программы введите 9.", numberOfDays);
+            Console.WriteLine("\nИнициализация программы...\n\nВыберите номер учебного дня (от 1 до {0}) и нажмите ENTER.\nДля выхода из программы введите 9.", numberOfDays);
             int value = GetValue();
             return value;
         }
@@ -58,7 +58,7 @@ namespace ConsoleApp1
         public void NextLesson()
         {
             Thread.Sleep(1000);
-            Console.WriteLine("Конец урока, нажмите enter для возврата в меню.");
+            Console.WriteLine("\nКонец урока, нажмите enter для возврата в меню.");
             Console.ReadLine();
             Console.Clear();
         }
@@ -77,6 +77,7 @@ namespace ConsoleApp1
                 WelcomeDay();
                 Console.WriteLine("Выберите номер Задания (от 1 до {0}) и нажмите ENTER.\nДля возврата на выбор Дня введите 9.", numberOfTasks);
                 value = GetValue();
+                Console.Clear();
                 switch (value)
                 {
                     case 1:
@@ -94,6 +95,9 @@ namespace ConsoleApp1
                     case 5:
                         Task5();
                         break;
+                    case 6:
+                        Task6();
+                        break;
                     case 9:
                         break;
                     case 0:
@@ -107,29 +111,32 @@ namespace ConsoleApp1
 
         public virtual void Task1()
         {
-            
+            WrongEnter();
         }
 
         public virtual void Task2()
         {
-            
+            WrongEnter();
         }
 
         public virtual void Task3()
         {
-           
-
+            WrongEnter();
         }
 
         public virtual void Task4()
         {
-            
-
+            WrongEnter();
         }
 
         public virtual void Task5()
         {
-           
+            WrongEnter();
+        }
+
+        public virtual void Task6()
+        {
+            WrongEnter();
         }
     }
 }

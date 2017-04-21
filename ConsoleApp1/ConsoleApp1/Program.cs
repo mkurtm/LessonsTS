@@ -21,6 +21,9 @@ namespace ConsoleApp1
                     case 2:
                         l = new Day2();
                         break;
+                    case 3:
+                        l = new Day3();
+                        break;
                     case 9:
                         break;
                     case 0:

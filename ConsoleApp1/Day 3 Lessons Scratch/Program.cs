@@ -11,7 +11,17 @@ namespace Day_3_Lessons_Scratch
     {
         static void Main()
         {
-            
+            int i = 5;
+
+            double d = 10.5;
+            i = Convert.ToInt32(d);
+
+            bool logic = false;
+            i = Convert.ToInt32(logic);
+
+
+
+
             Console.ReadLine();
         }
 

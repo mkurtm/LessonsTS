@@ -16,91 +16,13 @@ namespace Day_4_Lessons_Scratch
 
         static void Main()
         {
-            List<int> list = new List<int>();
-            Random rand = new Random();
-            int Size;
-            List<Box> ListOfBoxes = new List<Box>();
-            Box box = new Box();
-
-            Console.WriteLine("Генерируем список:");
-            for (int i = 0; i < 30; i++)
-            {
-                list.Add(rand.Next(1,50));
-                Console.Write("{0}| ", list[i]);
-            }
-
-            Size = list.Max()*2;
-            Console.WriteLine("\nМаксимальный размер коробки: {0}.", Size);
-
-            list.Sort();
-            Console.WriteLine("\nСортируем список:");
-            for (int i = 0; i < 30; i++)
-            {                
-                Console.Write("{0}| ", list[i]);
-            }
-
-
-            int i;
-            while (true)
-            {
-                Console.WriteLine("\n");
-                for (int i = list.Count - 1; i >= 0; i--)
-                {
-                    if (box.elements.Sum() + list[i] <= Size)
-                    {
-                        box.elements.Add(list[i]);
-                        Console.WriteLine("Положили в коробку: {0}.", list[i]);
-                        list.RemoveAt(i);
-                    }
-                }
-
-                if (box.elements.Sum() == 0)
-                {
-                    break;
-                }
-                else
-                {
-                    ListOfBoxes.Add(box);
-                    box.elements.Clear();
-                }
-
-                if (list.Count == 0)
-                    break;
-
-                Console.WriteLine("Нет больше места.");
-                Console.WriteLine("\nНовый список:");
-                for (int i = 0; i < list.Count; i++)
-                {
-                    Console.Write("{0}| ", list[i]);
-                }                
-            }
-
-
-
-
-
-
-            Console.WriteLine("\nСортировка окончена.\nКонечный результат таков:\nКоличество ящиков: {0}.", ListOfBoxes.Count());
-
-            for (int i = 0; i < ListOfBoxes.Count; i++)
-            {
-                Console.WriteLine("\nСостав ящика №{0}:", i+1);
-                //foreach (Box item in ListOfBoxes)
-                //{
-
-                //    Console.Write("{0}| ", item);
-                //}
-                Console.Write("{0}| ", ListOfBoxes[i].elements.Count);
-            }
-            
-
 
             Console.ReadLine();
         }
 
         private static void F2(int n)
         {
-            if (n>=0)
+            if (n >= 0)
             {
                 Console.Write("{0} |", n);
                 n--;
@@ -112,7 +34,7 @@ namespace Day_4_Lessons_Scratch
 
         private static int DayInMonth(DateTime dateTime)
         {
-            switch(dateTime.Month)
+            switch (dateTime.Month)
             {
                 case 1:
                 case 3:
@@ -121,29 +43,29 @@ namespace Day_4_Lessons_Scratch
                 case 8:
                 case 10:
                 case 12:
-                    return 31;                    
+                    return 31;
                 case 4:
                 case 6:
                 case 9:
                 case 11:
-                    return 30;                   
+                    return 30;
                 case 2:
                     if (IsLeap(dateTime.Year) == true)
                         return 29;
                     else
                         return 28;
                 default:
-                    return 0;           
-            }            
+                    return 0;
+            }
         }
 
         private static bool IsLeap(int year)
         {
-            if ((year-45)%4==0)
+            if ((year - 45) % 4 == 0)
                 return true;
-            
+
             else
-                return false;            
+                return false;
         }
 
         private static List<int> F1(List<int> list, EvenOdd evenOdd)
@@ -174,7 +96,7 @@ namespace Day_4_Lessons_Scratch
 
             return rlist;
         }
-        
+
         public void Task1()
         {
             List<int> list = new List<int>();
@@ -242,6 +164,62 @@ namespace Day_4_Lessons_Scratch
             int.TryParse(Console.ReadLine(), out n);
             F2(n);
         }
+
+        public void Task5()
+        {
+            List<int> list = new List<int>();
+            Random rand = new Random();
+            int Size, numOfBoxes = 0;
+            List<int> box = new List<int>();
+
+            Console.WriteLine("Генерируем список:");
+            for (int i = 0; i < 30; i++)
+            {
+                list.Add(rand.Next(1, 50));
+                Console.Write("{0}| ", list[i]);
+            }
+
+            Size = list.Max() * 2;
+            Console.WriteLine("\nМаксимальный размер коробки: {0}.", Size);
+
+            list.Sort();
+            Console.WriteLine("\nСортируем список:");
+            for (int i = 0; i < 30; i++)
+            {
+                Console.Write("{0}| ", list[i]);
+            }
+
+            while (true)
+            {
+                Console.WriteLine("\n");
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (box.Sum() + list[i] <= Size)
+                    {
+                        box.Add(list[i]);
+                        Console.WriteLine("Положили в коробку: {0}.", list[i]);
+                        list.RemoveAt(i);
+                    }
+                }
+
+                if (box.Sum() == 0)
+                    break;
+                else
+                    box.Clear();
+
+                if (list.Count == 0)
+                    break;
+
+                Console.WriteLine("Нет больше места.");
+                Console.WriteLine("\nНовый список:");
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Console.Write("{0}| ", list[i]);
+                }
+                numOfBoxes++;
+            }
+            Console.WriteLine("\nСортировка окончена.\nКонечный результат таков:\nКоличество ящиков: {0}.", numOfBoxes);
+        }
     }
 
 
@@ -262,8 +240,5 @@ namespace Day_4_Lessons_Scratch
         }
     }
 
-    class Box
-    {
-        public List<int> elements = new List<int>();
-    }
+
 }

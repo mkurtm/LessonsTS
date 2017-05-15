@@ -13,7 +13,7 @@ namespace ConsoleApp1
         {
             numberOfDay = 3;
             numberOfTasks = 2;
-            description = "Вывод массивов и списков через специальные созданные сервисные функции";
+            description = "Вывод массивов и списков через специальные созданные сервисные функции.";
             lessonsDescription = new List<string>
             {
                 @"Задание №1. Вывод массива.",

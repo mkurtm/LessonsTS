@@ -11,7 +11,9 @@ namespace Day_3_Lessons_Scratch
     {
         static void Main()
         {
-            
+
+          
+
             Console.ReadLine();
         }
 
@@ -35,7 +37,7 @@ namespace Day_3_Lessons_Scratch
             Thread.Sleep(2000);
             Console.Clear();
             int lengthx = arr.GetLength(0);
-            int lengthy = arr.Length / lengthx;
+            int lengthy = arr.GetLength(1);
 
             for (int x = 0; x < lengthx; x++)
             {
@@ -66,7 +68,7 @@ namespace Day_3_Lessons_Scratch
             PrintArray(arr);
         }
 
-        public void Tsk2()
+        public void Task2()
         {
             Console.WriteLine("Сейчас создадим список из 100 элементов.");
             List<int> list = new List<int>(100);

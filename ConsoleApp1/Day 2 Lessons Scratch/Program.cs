@@ -92,7 +92,7 @@ namespace Day_2_Lessons_Scratch
             }
 
             //Удаляем третью ячейку списка.
-            for (int i = 0; i < myList.Count; i++)
+            for (int i = myList.Count - 1; i >= 0; i--)
             {
                 if (i % 3 == 0)
                 {

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day 2 Lessons Scratch", "Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day 3 Lessons Scratch", "Day 3 Lessons Scratch\Day 3 Lessons Scratch.csproj", "{77807C02-5D37-4FBE-BA3B-8ECA21BBC002}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day 4 Lessons Scratch", "Day 4 Lessons Scratch\Day 4 Lessons Scratch.csproj", "{302B7DE6-C495-4032-985E-2ADD684FF93C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{77807C02-5D37-4FBE-BA3B-8ECA21BBC002}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77807C02-5D37-4FBE-BA3B-8ECA21BBC002}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77807C02-5D37-4FBE-BA3B-8ECA21BBC002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

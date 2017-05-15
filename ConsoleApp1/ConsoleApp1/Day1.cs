@@ -12,7 +12,7 @@ namespace ConsoleApp1
         {
             numberOfDay = 1;
             numberOfTasks = 5;
-            description = "Работа с простейшими циклами и операторами C#";
+            description = "Работа с простейшими циклами и операторами C#.";
             lessonsDescription = new List<string>
             {
                 @"Задание №1. Циклы.",

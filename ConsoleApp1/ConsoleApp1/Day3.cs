@@ -13,7 +13,7 @@ namespace ConsoleApp1
         {
             numberOfDay = 3;
             numberOfTasks = 2;
-            description = "Вывод массивов и списков через специальные созданные сервисные функции";
+            description = "Вывод массивов и списков через специальные созданные сервисные функции.";
             lessonsDescription = new List<string>
             {
                 @"Задание №1. Вывод массива.",
@@ -83,7 +83,7 @@ namespace ConsoleApp1
             Thread.Sleep(3000);
             Console.Clear();
             int lengthx = arr.GetLength(0);
-            int lengthy = arr.Length / lengthx;
+            int lengthy = arr.GetLength(1);
 
             for (int x = 0; x < lengthx; x++)
             {

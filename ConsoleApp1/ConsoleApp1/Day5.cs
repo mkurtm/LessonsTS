@@ -5,22 +5,27 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Day_5_Lessons_Scratch
+namespace ConsoleApp1
 {
-    class Program
+    class Day5 : Lesson
     {
-        static void Main()
+ 
+        public Day5()
         {
-            
+            numberOfDay = 5;
+            numberOfTasks = 2;
+            description = "Работа с классами.";
+            lessonsDescription = new List<string>
+            {
+                @"Задание №1. Создаем дочерний класс.",
+                @"Задание №2. Создаем массив экземпляров класса."
+            };
 
-            
-
-
-            Console.ReadLine(); 
-
+            NavigateTask();
         }
 
-        public void Task1()
+       
+        public override void Task1()
         {
             Console.WriteLine("Создадим объект - TickCandle, через базовый конструктор.");
             TickCandle tickCandle = new TickCandle();
@@ -49,9 +54,11 @@ namespace Day_5_Lessons_Scratch
 
             Console.WriteLine("\nНа текущий момент мы обратились к данным {0} раз, и записали {1} раз.", tickCandle.GetCounter, tickCandle.SetCounter);
             Console.WriteLine("\nДемонстрация завершена.");
+
+            NextLesson();
         }
 
-        public void Task2()
+        public override void Task2()
         {
             Candle[] candleArray = new Candle[10];
             Random rand = new Random();
@@ -87,8 +94,9 @@ namespace Day_5_Lessons_Scratch
             {
                 Console.WriteLine("Свеча№{0}. Значение Open равно: {1}.", i, candleArray[i].Open);
             }
+
+            NextLesson();
         }
+        
     }
-
-
 }

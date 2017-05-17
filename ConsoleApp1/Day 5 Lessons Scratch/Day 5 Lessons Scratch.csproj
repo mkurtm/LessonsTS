@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B000D8ED-B0C1-44B2-A7BF-7401CFFA4A0B}</ProjectGuid>
+    <ProjectGuid>{DFF92C4F-8D6E-4060-AD56-9D6F6DC2EE12}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp1</RootNamespace>
-    <AssemblyName>ConsoleApp1</AssemblyName>
+    <RootNamespace>Day_5_Lessons_Scratch</RootNamespace>
+    <AssemblyName>Day 5 Lessons Scratch</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,12 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Candle.cs" />
-    <Compile Include="Day5.cs" />
-    <Compile Include="Day4.cs" />
-    <Compile Include="Day3.cs" />
-    <Compile Include="Day2.cs" />
-    <Compile Include="Day1.cs" />
-    <Compile Include="Lesson.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -16,6 +16,7 @@ namespace Day_4_Lessons_Scratch
 
         static void Main()
         {
+            Task6();
 
             Console.ReadLine();
         }
@@ -220,6 +221,85 @@ namespace Day_4_Lessons_Scratch
             }
             Console.WriteLine("\nСортировка окончена.\nКонечный результат таков:\nКоличество ящиков: {0}.", numOfBoxes);
         }
+
+        public static void Task6()
+        {
+            List<int> list = new List<int>();
+            Random rand = new Random();
+            int Size;
+            List<Box> Shelf = new List<Box>();
+            Box box = new Box();            
+
+            Console.WriteLine("Генерируем список:");
+            for (int i = 0; i < 30; i++)
+            {
+                list.Add(rand.Next(1, 50));
+                Console.Write("{0}| ", list[i]);
+            }
+
+            Size = list.Max() * 2;
+            Console.WriteLine("\nМаксимальный размер коробки: {0}.", Size);
+
+            list.Sort();
+            Console.WriteLine("\nСортируем список:");
+            for (int i = 0; i < 30; i++)
+            {
+                Console.Write("{0}| ", list[i]);
+            }
+
+            while (true)
+            {
+                Console.WriteLine("\n");
+                for (int i = list.Count - 1; i >= 0; i--)
+                {
+                    if (box.things.Sum() + list[i] <= Size)
+                    {
+                        box.things.Add(list[i]);
+                        Console.WriteLine("Положили в коробку: {0}.", list[i]);
+                        list.RemoveAt(i);
+                    }
+                }
+
+                if (box.things.Sum() == 0)
+                    break;
+                else
+                {
+                    Shelf.Add(box);
+                    box= new Box();
+                }
+                
+                if (list.Count == 0)
+                    break;
+
+                Console.WriteLine("Нет больше места.");
+                Console.WriteLine("\nНовый список:");
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Console.Write("{0}| ", list[i]);
+                }                
+            }
+            
+            Console.WriteLine("\nСортировка окончена.\nКонечный результат таков:\nКоличество ящиков: {0}.", Shelf.Count);
+            Console.Write("\nНажмите Enter, чтобы увидеть содержимое каждого ящика.");
+            Console.ReadLine();
+
+            for (int j = 0; j < Shelf.Count; j++)
+            {
+                Thread.Sleep(1000);
+
+                Console.Write("\nСодержимое ящика №{0}:\t|",j+1);
+
+                for (int i = 0; i < Shelf[j].things.Count; i++)
+                {
+                    Console.Write("{0}| ", Shelf[j].things[i]);
+                }
+            }   
+        }
+    }
+
+    class Box
+    {
+        public List<int> things = new List<int>();
     }
 
 

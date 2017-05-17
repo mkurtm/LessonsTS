@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lessons", "ConsoleApp1\Lessons.csproj", "{B000D8ED-B0C1-44B2-A7BF-7401CFFA4A0B}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day 3 Lessons Scratch", "Day 3 Lessons Scratch\Day 3 Lessons Scratch.csproj", "{77807C02-5D37-4FBE-BA3B-8ECA21BBC002}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day 4 Lessons Scratch", "Day 4 Lessons Scratch\Day 4 Lessons Scratch.csproj", "{302B7DE6-C495-4032-985E-2ADD684FF93C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day 5 Lessons Scratch", "Day 5 Lessons Scratch\Day 5 Lessons Scratch.csproj", "{DFF92C4F-8D6E-4060-AD56-9D6F6DC2EE12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{302B7DE6-C495-4032-985E-2ADD684FF93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFF92C4F-8D6E-4060-AD56-9D6F6DC2EE12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFF92C4F-8D6E-4060-AD56-9D6F6DC2EE12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFF92C4F-8D6E-4060-AD56-9D6F6DC2EE12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFF92C4F-8D6E-4060-AD56-9D6F6DC2EE12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

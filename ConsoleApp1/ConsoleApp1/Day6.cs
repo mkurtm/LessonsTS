@@ -5,18 +5,27 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Day_6_Lessons_Scratch
+namespace ConsoleApp1
 {
-    class Program
+    class Day6 : Lesson
     {
-        static void Main()
+ 
+        public Day6()
         {
-            
-            Console.ReadLine();
+            numberOfDay = 6;
+            numberOfTasks = 2;
+            description = "Работа с Интерфейсами.";
+            lessonsDescription = new List<string>
+            {
+                @"Задание №1. Множественное наследование интерфейсов.",
+                @"Задание №2. Создаем и работаем с классами от интерфейса."
+            };
 
+            NavigateTask();
         }
 
-        public void Task1()
+       
+        public override void Task1()
         {
             StockCandle stockCandle = new StockCandle();
             FortsCandle fortsCandle = new FortsCandle();
@@ -29,9 +38,11 @@ namespace Day_6_Lessons_Scratch
             }
 
             FortsCandle fortsCandle2 = stockCandle as FortsCandle;
+
+            NextLesson();
         }
 
-        public void Task2()
+        public override void Task2()
         {
             string Name;
             Random rand = new Random();
@@ -64,6 +75,8 @@ namespace Day_6_Lessons_Scratch
             Console.WriteLine("Мы создали точку с именем {0}.", square.Name);
             Console.WriteLine("Запрашиваем площадь: {0:#.###}, запрашиваем длинну: {1:#.###}.", square.Area(), square.Lenght());
 
+            NextLesson();
         }
+        
     }
 }

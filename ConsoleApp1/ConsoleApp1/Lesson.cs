@@ -10,7 +10,7 @@ namespace ConsoleApp1
     class Lesson
     {
         /* Базовый класс для всех уроков */
-        public int numberOfDay, numberOfTasks, numberOfDays = 5;
+        public int numberOfDay, numberOfTasks, numberOfDays = 6;
         public string description;
         public List<string> lessonsDescription = new List<string>();
 

@@ -5,19 +5,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Day_7_Lessons_Scratch
+namespace ConsoleApp1
 {
-    class Program
+    class Day7 : Lesson
     {
-        static void Main()
+ 
+        public Day7()
         {
+            numberOfDay = 7;
+            numberOfTasks = 1;
+            description = "Работа со статическим классом.";
+            lessonsDescription = new List<string>
+            {
+                @"Задание №1. Создание Singleton и попытка его изменить."
+            };
 
-
-            Console.ReadKey();
-
+            NavigateTask();
         }
 
-        public void Task1()
+       
+        public override void Task1()
         {
             Computer comp = new Computer();
             comp.Launch("WIN 10");
@@ -31,6 +38,7 @@ namespace Day_7_Lessons_Scratch
             comp.Launch("LINUX");
             Console.WriteLine("На компьютере установлена ОС:{0}.", comp.OS.Name);
 
+            NextLesson();
         }
 
         class Computer
@@ -62,5 +70,7 @@ namespace Day_7_Lessons_Scratch
                 return instance;
             }
         }
+
+
     }
 }

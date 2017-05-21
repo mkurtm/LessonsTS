@@ -52,6 +52,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelegateClass.cs" />
+    <Compile Include="SMALong Optimized.cs" />
     <Compile Include="SMALong.cs" />
     <Compile Include="Panels3.cs" />
     <Compile Include="Program.cs" />

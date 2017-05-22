@@ -141,7 +141,7 @@ namespace Day_8_Lessons_Scratch
             if (candle.IsWhite())
                 return candle.Low == candle.Open;
 
-            return candle.Low == candle.Open;
+            return candle.Low == candle.Close;
         }
 
         public static bool IsWhite(this Bar candle)
@@ -151,7 +151,7 @@ namespace Day_8_Lessons_Scratch
 
         public static bool IsBlack(this Bar candle)
         {
-            return (candle.Close > candle.Open);
+            return (candle.Close < candle.Open);
         }
     }
 }

@@ -12,6 +12,28 @@ namespace Day_8_Lessons_Scratch
 
         static void Main()
         {
+            
+
+            Console.ReadKey();
+        }
+
+        static double Sub(double f, int s)
+        {
+            return f - s;
+        }
+
+        static double Summ(double f, int s)
+        {
+            return f + s;
+        }
+
+        static void SomeAction(string msg, double f, int s, TestDeligate func)
+        {
+            Console.WriteLine("{0} {1}", msg, func(f, s));
+        }
+
+        static void Lesson()
+        {
             TestDeligate d0 = new TestDeligate(Summ);
             TestDeligate d1 = Summ;
 
@@ -44,25 +66,10 @@ namespace Day_8_Lessons_Scratch
             Console.WriteLine("{0}", d0(15.5, 5));
 
             Action act = () => Console.WriteLine("ACT!");
-            Action<int> act1= (i)=> Console.WriteLine("ACT! {0}", i);
+            Action<int> act1 = (i) => Console.WriteLine("ACT! {0}", i);
 
             Func<int, int> act2 = (i) => i;
             Func<int, Double, bool> act3 = (i, d) => true;
-        }
-
-        static double Sub(double f, int s)
-        {
-            return f - s;
-        }
-
-        static double Summ(double f, int s)
-        {
-            return f + s;
-        }
-
-        static void SomeAction(string msg, double f, int s, TestDeligate func)
-        {
-            Console.WriteLine("{0} {1}", msg, func(f, s));
         }
     }
 }

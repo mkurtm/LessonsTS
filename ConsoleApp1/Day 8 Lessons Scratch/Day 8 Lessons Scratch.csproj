@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B000D8ED-B0C1-44B2-A7BF-7401CFFA4A0B}</ProjectGuid>
+    <ProjectGuid>{100FB439-E8CC-46E6-8FC1-B84F6775486E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp1</RootNamespace>
-    <AssemblyName>ConsoleApp1</AssemblyName>
+    <RootNamespace>Day_8_Lessons_Scratch</RootNamespace>
+    <AssemblyName>Day 8 Lessons Scratch</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -52,22 +52,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Candle.cs" />
-    <Compile Include="Day8.cs" />
-    <Compile Include="Day7.cs" />
-    <Compile Include="Day6.cs" />
-    <Compile Include="Day5.cs" />
-    <Compile Include="Day4.cs" />
-    <Compile Include="Day3.cs" />
-    <Compile Include="Day2.cs" />
-    <Compile Include="Day1.cs" />
-    <Compile Include="IAbstractFigure.cs" />
-    <Compile Include="ICandle.cs" />
-    <Compile Include="Lesson.cs" />
-    <Compile Include="Manager.cs" />
+    <Compile Include="DelegateClass.cs" />
+    <Compile Include="Donchian.cs" />
+    <Compile Include="MaribozuTask1.cs" />
+    <Compile Include="SMALong Optimized.cs" />
+    <Compile Include="SMALong.cs" />
+    <Compile Include="Panels3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TradeHelper.cs" />
+    <Compile Include="TwoStocks.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

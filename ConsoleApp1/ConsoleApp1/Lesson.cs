@@ -10,7 +10,7 @@ namespace ConsoleApp1
     class Lesson
     {
         /* Базовый класс для всех уроков */
-        public int numberOfDay, numberOfTasks, numberOfDays = 7;
+        public int numberOfDay, numberOfTasks, numberOfDays = 8;
         public string description;
         public List<string> lessonsDescription = new List<string>();
 
@@ -22,7 +22,7 @@ namespace ConsoleApp1
         public void WelcomeDay()
         {
             Console.Clear();
-            Console.WriteLine("Добро пожаловать в День №{0}.\nТема: {1}.\nСегодня было решено {2} задач:", numberOfDay, description, numberOfTasks);
+            Console.WriteLine("Добро пожаловать в День №{0}.\nТема: {1}\nСегодня было решено {2} задач:", numberOfDay, description, numberOfTasks);
             foreach (string item in lessonsDescription)
             {
                 Console.WriteLine(item);
@@ -35,7 +35,7 @@ namespace ConsoleApp1
         public int NavigateDay()
         {
             Console.Clear();
-            Console.WriteLine("\nИнициализация программы...\n\nВыберите номер учебного дня (от 1 до {0}) и нажмите ENTER.\nДля выхода из программы введите 9.", numberOfDays);
+            Console.WriteLine("Инициализация программы...\n\nВыберите номер учебного дня (от 1 до {0}) и нажмите ENTER.\nДля выхода из программы введите 9.", numberOfDays);
             int value = GetValue();
             return value;
         }

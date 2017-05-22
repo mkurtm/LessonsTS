@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TSLab.Script;
 using TSLab.Script.Handlers;
 
-namespace Day_8_Lessons_Scratch
+namespace ConsoleApp1
 {
     public class MaribozuTask1 : IExternalScript
 

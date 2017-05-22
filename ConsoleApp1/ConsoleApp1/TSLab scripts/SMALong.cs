@@ -3,7 +3,7 @@ using TSLab.Script;
 using TSLab.Script.Handlers;
 using TSLab.Script.Helpers;
 
-namespace Day_8_Lessons_Scratch
+namespace ConsoleApp1
 {
     public class SmaLong : IExternalScript
     {

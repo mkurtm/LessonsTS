@@ -4,7 +4,7 @@ using TSLab.Script.Handlers;
 using TSLab.Script.Helpers;
 using TSLab.Script.Optimization;
 
-namespace Day_8_Lessons_Scratch
+namespace ConsoleApp1
 {
     public class SmaLongOptimized : IExternalScript
     {

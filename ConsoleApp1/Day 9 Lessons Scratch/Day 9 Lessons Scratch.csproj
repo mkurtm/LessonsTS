@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B000D8ED-B0C1-44B2-A7BF-7401CFFA4A0B}</ProjectGuid>
+    <ProjectGuid>{35D7D5D2-1E98-468E-86B3-3B99C9D72AD8}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp1</RootNamespace>
-    <AssemblyName>ConsoleApp1</AssemblyName>
+    <RootNamespace>Day_9_Lessons_Scratch</RootNamespace>
+    <AssemblyName>Day 9 Lessons Scratch</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,43 +34,16 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TSLab.DataSource">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TSLab 1.2\TSLab.DataSource.dll</HintPath>
-    </Reference>
-    <Reference Include="TSLab.Script">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TSLab 1.2\TSLab.Script.dll</HintPath>
-    </Reference>
-    <Reference Include="TSLab.Script.Handlers">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\TSLab 1.2\TSLab.Script.Handlers.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Candle.cs" />
-    <Compile Include="Homeworks\Day8.cs" />
-    <Compile Include="Homeworks\Day7.cs" />
-    <Compile Include="Homeworks\Day6.cs" />
-    <Compile Include="Homeworks\Day5.cs" />
-    <Compile Include="Homeworks\Day4.cs" />
-    <Compile Include="Homeworks\Day3.cs" />
-    <Compile Include="Homeworks\Day2.cs" />
-    <Compile Include="Homeworks\Day1.cs" />
-    <Compile Include="Classes\IAbstractFigure.cs" />
-    <Compile Include="Classes\ICandle.cs" />
-    <Compile Include="Homeworks\Lesson.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TSLab scripts\TradeHelper.cs" />
-    <Compile Include="TSLab scripts\Donchian.cs" />
-    <Compile Include="TSLab scripts\MaribozuTask1.cs" />
-    <Compile Include="TSLab scripts\SMALong Optimized.cs" />
-    <Compile Include="TSLab scripts\SMALong.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

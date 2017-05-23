@@ -66,6 +66,8 @@
     <Compile Include="Homeworks\Lesson.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TSLab scripts\My.cs" />
+    <Compile Include="TSLab scripts\MyTradeHelper.cs" />
     <Compile Include="TSLab scripts\TradeHelper.cs" />
     <Compile Include="TSLab scripts\Donchian.cs" />
     <Compile Include="TSLab scripts\MaribozuTask1.cs" />

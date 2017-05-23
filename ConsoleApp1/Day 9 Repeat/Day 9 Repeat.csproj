@@ -50,6 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MultiTrail.cs" />
+    <Compile Include="ParabolicTrail.cs" />
+    <Compile Include="AdaptiveSMATrailStop.cs" />
     <Compile Include="StandartTrailStopSMA.cs" />
     <Compile Include="StandartTrailStop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

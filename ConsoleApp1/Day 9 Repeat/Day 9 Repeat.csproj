@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B000D8ED-B0C1-44B2-A7BF-7401CFFA4A0B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>ConsoleApp1</RootNamespace>
-    <AssemblyName>ConsoleApp1</AssemblyName>
+    <ProjectGuid>{1969FCE4-7885-49C2-830F-72657260B70B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Day_9_Repeat</RootNamespace>
+    <AssemblyName>Day 9 Repeat</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -52,30 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Candle.cs" />
-    <Compile Include="Homeworks\Day8.cs" />
-    <Compile Include="Homeworks\Day7.cs" />
-    <Compile Include="Homeworks\Day6.cs" />
-    <Compile Include="Homeworks\Day5.cs" />
-    <Compile Include="Homeworks\Day4.cs" />
-    <Compile Include="Homeworks\Day3.cs" />
-    <Compile Include="Homeworks\Day2.cs" />
-    <Compile Include="Homeworks\Day1.cs" />
-    <Compile Include="Classes\IAbstractFigure.cs" />
-    <Compile Include="Classes\ICandle.cs" />
-    <Compile Include="Homeworks\Lesson.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="StandartTrailStopSMA.cs" />
+    <Compile Include="StandartTrailStop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="My\My.cs" />
-    <Compile Include="My\MyTradeHelper.cs" />
-    <Compile Include="TSLab scripts\TradeHelper.cs" />
-    <Compile Include="TSLab scripts\Donchian.cs" />
-    <Compile Include="TSLab scripts\MaribozuTask1.cs" />
-    <Compile Include="TSLab scripts\SMALong Optimized.cs" />
-    <Compile Include="TSLab scripts\SMALong.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

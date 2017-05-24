@@ -11,7 +11,7 @@ using TSLab.Script.Optimization;
 
 namespace Day_9_Repeat
 {
-    public class MultiTrail : IExternalScript
+    public class MultiTrailMy : IExternalScript
     {
         public OptimProperty uchPeriod = new OptimProperty(20, 1, 100, 1);
         public OptimProperty dchPeriod = new OptimProperty(20, 1, 100, 1);
@@ -32,12 +32,18 @@ namespace Day_9_Repeat
                                          () => Series.Lowest(sec.LowPrices, dchPeriod));
 
             var trailHnd = new TrailStop() { StopLoss = StopLoss, TrailEnable = TrailEnable, TrailLoss = TrailLoss };
-            
+
             for (int i = uchPeriod > dchPeriod ? uchPeriod : dchPeriod; i < ctx.BarsCount; i++)
             {
                 var le = sec.Positions.GetLastActiveForSignal("LE");
                 var se = sec.Positions.GetLastActiveForSignal("SE");
                 var currPos = sec.Positions.GetActiveForBar(i);
+
+                if (sec.Bars[i].Date.TimeOfDay > new TimeSpan(23, 40, 00) ||
+                    sec.Bars[i].Date.TimeOfDay < new TimeSpan(10, 05, 00))
+                {
+                    continue;
+                }
 
                 if (le == null)
                     sec.Positions.BuyIfGreater(i + 1, 1, highChanel[i], 50, "LE");

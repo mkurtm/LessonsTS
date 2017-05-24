@@ -50,6 +50,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MultiTrailMy.cs" />
+    <Compile Include="OneLoss.cs" />
+    <Compile Include="TimeStop.cs" />
+    <Compile Include="ExpiryDateStop.cs" />
     <Compile Include="MultiTrail.cs" />
     <Compile Include="ParabolicTrail.cs" />
     <Compile Include="AdaptiveSMATrailStop.cs" />

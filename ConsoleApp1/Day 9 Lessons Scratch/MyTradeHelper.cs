@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace Day_9_Lessons_Scratch
 { 
     public static class MyTradeHelper
     {

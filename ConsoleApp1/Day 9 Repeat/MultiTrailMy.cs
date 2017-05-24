@@ -32,11 +32,15 @@ namespace Day_9_Repeat
                                          () => Series.Lowest(sec.LowPrices, dchPeriod));
 
             var trailHnd = new TrailStop() { StopLoss = StopLoss, TrailEnable = TrailEnable, TrailLoss = TrailLoss };
-
+            var comissHnd = new AbsolutCommission() { Commission = 30 };
+          
             for (int i = uchPeriod > dchPeriod ? uchPeriod : dchPeriod; i < ctx.BarsCount; i++)
             {
                 var le = sec.Positions.GetLastActiveForSignal("LE");
                 var se = sec.Positions.GetLastActiveForSignal("SE");
+               
+                comissHnd.Execute(sec);
+                
                 var currPos = sec.Positions.GetActiveForBar(i);
 
                 if (sec.Bars[i].Date.TimeOfDay > new TimeSpan(23, 40, 00) ||

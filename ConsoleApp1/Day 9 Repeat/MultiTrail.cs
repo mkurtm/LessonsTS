@@ -15,7 +15,11 @@ namespace Day_9_Repeat
     {
         public OptimProperty uchPeriod = new OptimProperty(20, 1, 100, 1);
         public OptimProperty dchPeriod = new OptimProperty(20, 1, 100, 1);
-
+        public OptimProperty StopLoss = new OptimProperty(1, 0, 5, 0.1);
+        public OptimProperty TrailEnable = new OptimProperty(1, 0, 5, 0.1);
+        public OptimProperty TrailLoss = new OptimProperty(1, 0, 5, 0.1);
+        public OptimProperty parSpreadLE = new OptimProperty(500, 0, 5000, 10);
+        public OptimProperty parSpreadSE = new OptimProperty(500, 0, 5000, 10);
 
         public void Execute(IContext ctx, ISecurity sec)
         {
@@ -27,7 +31,8 @@ namespace Day_9_Repeat
             var lowChanel = ctx.GetData("lowest", new string[] { dchPeriod.ToString() },
                                          () => Series.Lowest(sec.LowPrices, dchPeriod));
 
-
+            var trailHnd = new TrailStop() { StopLoss = StopLoss, TrailEnable = TrailEnable, TrailLoss = TrailLoss };
+            
             for (int i = uchPeriod > dchPeriod ? uchPeriod : dchPeriod; i < ctx.BarsCount; i++)
             {
                 var le = sec.Positions.GetLastActiveForSignal("LE");
@@ -51,16 +56,25 @@ namespace Day_9_Repeat
                             {
                                 var timeInPose = i - item.EntryBarNum + 1;
                                 var y = timeInPose * timeInPose;
-                                var stopLoss = item.EntryPrice - 500 + y * 1;
-                                item.CloseAtStop(i + 1, stopLoss, "LSX");
+                                var stopLossParabolicLE = item.EntryPrice - parSpreadLE + y * 1;
+                                var stopLossTrailLE = trailHnd.Execute(le, i);
+                                if (stopLossParabolicLE > stopLossTrailLE)
+                                    item.CloseAtStop(i + 1, stopLossParabolicLE, "LXpar");
+                                else
+                                    item.CloseAtStop(i + 1, stopLossTrailLE, "LXtrail");
                             }
                             break;
                         case "SE":
                             {
                                 var timeInPose = i - item.EntryBarNum + 1;
                                 var y = timeInPose * timeInPose;
-                                var stopLoss = item.EntryPrice + 500 - y * 1;
-                                item.CloseAtStop(i + 1, stopLoss, "SX");
+                                var stopLossParabolicSE = item.EntryPrice + parSpreadSE - y * 1;
+                                var stopLossTrailSE = trailHnd.Execute(se, i);
+
+                                if (stopLossParabolicSE < stopLossTrailSE)
+                                    item.CloseAtStop(i + 1, stopLossParabolicSE, "SXpar");
+                                else
+                                    item.CloseAtStop(i + 1, stopLossTrailSE, "SXtrail");
                             }
                             break;
                         default:
@@ -80,7 +94,7 @@ namespace Day_9_Repeat
 
             lst = pane.AddList(highChanel.ToString(), highChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(lowChanel.ToString(), lowChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
-
         }
+
     }
 }

@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Script2.cs" />
     <Compile Include="Script1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

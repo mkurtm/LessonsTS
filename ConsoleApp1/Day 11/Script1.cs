@@ -77,7 +77,7 @@ namespace Day_11
             //{
             //    if (entry)
             //        return 0;
-            //    if (pos.ProfitPct() > 0.1)
+            //    if (pos.BarsHeld > 10)
             //        return pos.Shares * pos.Security.LotSize * 20;
             //    else if (pos.ProfitPct() < 0)
             //        return pos.Shares * pos.Security.LotSize * 10;

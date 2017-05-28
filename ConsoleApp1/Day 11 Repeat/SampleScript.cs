@@ -17,6 +17,8 @@ namespace Day_11
         #region Params
 
         public OptimProperty chPeriod = new OptimProperty(20, 1, 100, 1);
+        public OptimProperty chPeriodDay = new OptimProperty(1, 1, 10, 1);
+
         public OptimProperty stop = new OptimProperty(2, 0.25, 5, 0.25);
         public OptimProperty take = new OptimProperty(2, 0.25, 5, 0.25);
 
@@ -37,8 +39,15 @@ namespace Day_11
                                         () => Series.Highest(sec.HighPrices, chPeriod));
             var lowChanel = ctx.GetData("lowest", new string[] { chPeriod.ToString() },
                                () => Series.Lowest(sec.LowPrices, chPeriod));
-            var daySec = sec.CompressTo(new Interval(1, DataIntervals.DAYS));
 
+            //Дневной канал
+            var daySec = sec.CompressTo(new Interval(1, DataIntervals.DAYS));
+            var dayHighest = ctx.GetData("dayhighest", new string[] { chPeriodDay.ToString() },
+                                        () =>
+                                        {
+                                            var h = Series.Highest(daySec.HighPrices, chPeriodDay);
+                                            return daySec.Decompress(h);
+                                        });
 
             //Set commiss
             var comiss = new AbsolutCommission() { Commission = 10 };
@@ -55,10 +64,10 @@ namespace Day_11
             #endregion
 
             #region Trading
-            
+
             bool stopMoveFlag = false;
 
-            for (int i = start; i <count; i++)
+            for (int i = start; i < count; i++)
             {
                 var le = sec.Positions.GetLastActiveForSignal("LE");
                 var leAdd = sec.Positions.GetLastActiveForSignal("LEadd");
@@ -74,10 +83,16 @@ namespace Day_11
                 else
                 {
                     //пробуем нарастить позу
-                    if (leAdd == null)
+                    if (leAdd == null && leD == null)
                     {
                         var posAddPrice = le.EntryPrice * (1 + posAdd / 100.0);
                         sec.Positions.BuyIfGreater(i + 1, 1, posAddPrice, "LEadd");
+                    }
+
+                    if (sec.Bars[i - 1].Close < dayHighest[i - 1] && sec.Bars[i].Close > dayHighest[i])
+                    {
+                        var lots = lePos.TotalSize() / sec.LotSize;
+                        sec.Positions.BuyAtMarket(i + 1, lots, "LEd");
                     }
 
                     var avgEntry = lePos.AvgEntryPrice();
@@ -97,7 +112,7 @@ namespace Day_11
                     else
                     {
                         var stopLoss = avgEntry * (1 - stop / 100.0);
-                        lePos.ForEach(p=> p.CloseAtStop(i + 1, stopLoss, "LXS"));
+                        lePos.ForEach(p => p.CloseAtStop(i + 1, stopLoss, "LXS"));
                     }
                 }
             }
@@ -117,6 +132,10 @@ namespace Day_11
 
             lst = pane.AddList(highChanel.ToString(), highChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(lowChanel.ToString(), lowChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+
+            color = new TSLab.Script.Color(System.Drawing.Color.Blue.ToArgb());
+            lst = pane.AddList(dayHighest.ToString(), dayHighest, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+            lst.Thickness = 3;
 
             #endregion
 

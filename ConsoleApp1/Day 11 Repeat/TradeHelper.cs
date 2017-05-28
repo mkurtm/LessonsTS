@@ -164,12 +164,18 @@ namespace Day_11
         {
             return pos.EntryPrice * pos.PosSize();
         }
+
         public static double AvgEntryPrice(this IList<IPosition> positions)
         {
             var totalPrice = positions.Sum(p => p.PositionEntryPrice());
             var totalSize = positions.Sum(p => p.PosSize());
 
             return totalPrice / totalSize;
+        }
+
+        public static double TotalSize(this IList<IPosition> positions)
+        {
+            return positions.Sum(p => p.PosSize());
         }
     }
 }

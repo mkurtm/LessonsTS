@@ -25,6 +25,10 @@ namespace Day_11
         public OptimProperty posAdd = new OptimProperty(1, 0.25, 5, 0.25);
         public OptimProperty stopMove = new OptimProperty(0.75, 0.25, 5, 0.25);
 
+        public OptimProperty TrStopLoss = new OptimProperty(1.5, 0.25, 5, 0.25);
+        public OptimProperty TrEnable = new OptimProperty(1, 0.25, 5, 0.25);
+        public OptimProperty TrLoss = new OptimProperty(0.5, 0.25, 5, 0.25);
+
         #endregion
 
         public void Execute(IContext ctx, ISecurity sec)
@@ -66,6 +70,8 @@ namespace Day_11
             #region Trading
 
             bool stopMoveFlag = false;
+            bool trEnableFlag = false;
+            var lastStopLoss = 0.0;
 
             for (int i = start; i < count; i++)
             {
@@ -79,6 +85,7 @@ namespace Day_11
                 {
                     sec.Positions.BuyIfGreater(i + 1, 1, highChanel[i], 50, "LE");
                     stopMoveFlag = false;
+                    trEnableFlag = false;
                 }
                 else
                 {
@@ -97,23 +104,48 @@ namespace Day_11
 
                     var avgEntry = lePos.AvgEntryPrice();
 
-                    //take
-                    var takeprofit = avgEntry * (1 + take / 100.0);
-                    lePos.ForEach(p => p.CloseAtProfit(i + 1, takeprofit, "LXP"));
-
                     //stop
-                    var stopMovePrice = avgEntry * (1 + stopMove / 100.0);
-                    if (sec.Bars[i].High > stopMovePrice || stopMoveFlag == true)
+                    if (leD == null)
                     {
-                        stopMoveFlag = true;
-                        var stoploss = avgEntry;
-                        lePos.ForEach(p => p.CloseAtStop(i + 1, stoploss, "LXSmoved"));
+                        //take
+                        var takeprofit = avgEntry * (1 + take / 100.0);
+                        lePos.ForEach(p => p.CloseAtProfit(i + 1, takeprofit, "LXP"));
+
+                        var stopMovePrice = avgEntry * (1 + stopMove / 100.0);
+                        if (sec.Bars[i].High > stopMovePrice || stopMoveFlag == true)
+                        {
+                            stopMoveFlag = true;
+                            var stoploss = avgEntry;
+                            lePos.ForEach(p => p.CloseAtStop(i + 1, stoploss, "LXSmoved"));
+                        }
+                        else
+                        {
+                            var stopLoss = avgEntry * (1 - stop / 100.0);
+                            lePos.ForEach(p => p.CloseAtStop(i + 1, stopLoss, "LXS"));
+                        }
                     }
                     else
                     {
-                        var stopLoss = avgEntry * (1 - stop / 100.0);
-                        lePos.ForEach(p => p.CloseAtStop(i + 1, stopLoss, "LXS"));
+                        var enablePrice = avgEntry * (1 + TrEnable / 100.0);
+                        if (enablePrice < sec.HighPrices[i])
+                            trEnableFlag = true;
+
+                        if (trEnableFlag)
+                        {
+                            var trStop = sec.HighPrices[i] * (1 - TrLoss / 100.0);
+                            var stopLoss = Math.Max(trStop, lastStopLoss);
+                            lastStopLoss = stopLoss;
+                            lePos.ForEach(p => p.CloseAtStop(i + 1, stopLoss, "LXtrail"));
+                        }
+                        else
+                        {
+                            var stopLoss = avgEntry * (1 - TrStopLoss / 100.0);
+                            lastStopLoss = stopLoss;
+                            lePos.ForEach(p => p.CloseAtStop(i + 1, stopLoss, "LXStr"));
+                        }
+
                     }
+
                 }
             }
 

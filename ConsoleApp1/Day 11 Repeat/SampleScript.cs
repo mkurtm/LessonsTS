@@ -13,14 +13,20 @@ namespace Day_11
 {
     public class SampleScript : IExternalScript
     {
+        #region Params
+
         public OptimProperty chPeriod = new OptimProperty(20, 1, 100, 1);
         public OptimProperty stop = new OptimProperty(2, 0.25, 5, 0.25);
         public OptimProperty take = new OptimProperty(2, 0.25, 5, 0.25);
 
         public OptimProperty posAdd = new OptimProperty(1, 0.25, 5, 0.25);
 
+        #endregion
+        
         public void Execute(IContext ctx, ISecurity sec)
         {
+            #region Init
+
             var highChanel = ctx.GetData("highest", new string[] { chPeriod.ToString() },
                                         () => Series.Highest(sec.HighPrices, chPeriod));
             var lowChanel = ctx.GetData("lowest", new string[] { chPeriod.ToString() },
@@ -28,8 +34,10 @@ namespace Day_11
 
             var comiss = new AbsolutCommission() { Commission = 10 };
             comiss.Execute(sec);
+            
+            #endregion            
 
-
+            #region Trading
 
             for (int i = chPeriod + 1; i < ctx.BarsCount; i++)
             {
@@ -65,13 +73,14 @@ namespace Day_11
                 }
             }
 
+            #endregion
 
+            #region Drawing
 
             if (ctx.IsOptimization)
             {
                 return;
             }
-
 
             var pane = ctx.CreatePane("main", 100, false);
             var color = new TSLab.Script.Color(System.Drawing.Color.Black.ToArgb());
@@ -80,6 +89,8 @@ namespace Day_11
             lst = pane.AddList(highChanel.ToString(), highChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(lowChanel.ToString(), lowChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
+            #endregion
+            
         }
     }
 }

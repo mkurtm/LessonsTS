@@ -26,26 +26,36 @@ namespace Day_11
 
         public void Execute(IContext ctx, ISecurity sec)
         {
-            #region Init
+            #region Init indicators and Setups
 
             var highChanel = ctx.GetData("highest", new string[] { chPeriod.ToString() },
                                         () => Series.Highest(sec.HighPrices, chPeriod));
             var lowChanel = ctx.GetData("lowest", new string[] { chPeriod.ToString() },
                                () => Series.Lowest(sec.LowPrices, chPeriod));
 
+            //Set commiss
             var comiss = new AbsolutCommission() { Commission = 10 };
             comiss.Execute(sec);
+
+            //Не используем незакрытый бар для пересчета.
+            var count = ctx.BarsCount;
+            if (!ctx.IsLastBarClosed)
+                count--;
+
+            //Торговать с бара минимального индикатора или с настройки
+            var start = Math.Max(ctx.TradeFromBar, chPeriod + 1);
 
             #endregion
 
             #region Trading
-
+            
             bool stopMoveFlag = false;
 
-            for (int i = chPeriod + 1; i < ctx.BarsCount; i++)
+            for (int i = start; i <count; i++)
             {
                 var le = sec.Positions.GetLastActiveForSignal("LE");
                 var leAdd = sec.Positions.GetLastActiveForSignal("LEadd");
+                var leD = sec.Positions.GetLastActiveForSignal("LEd");
                 //Отобрали позы, начинающийся с LE
                 var lePos = sec.Positions.GetActiveForBar(i).Where(p => p.EntrySignalName.StartsWith("LE")).ToList();
 

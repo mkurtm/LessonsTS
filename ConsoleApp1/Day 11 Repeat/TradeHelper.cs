@@ -3,7 +3,7 @@ using System.Linq;
 using TSLab.Script;
 using TSLab.Script.Handlers;
 
-namespace ConsoleApp1   
+namespace Day_11
 {
     /// <summary>
     /// Вспомогательный класс, содержащий хелпер методы. В том числе и методы расширения.

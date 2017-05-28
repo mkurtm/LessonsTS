@@ -20,9 +20,10 @@ namespace Day_11
         public OptimProperty take = new OptimProperty(2, 0.25, 5, 0.25);
 
         public OptimProperty posAdd = new OptimProperty(1, 0.25, 5, 0.25);
+        public OptimProperty stopMove = new OptimProperty(0.75, 0.25, 5, 0.25);
 
         #endregion
-        
+
         public void Execute(IContext ctx, ISecurity sec)
         {
             #region Init
@@ -34,10 +35,12 @@ namespace Day_11
 
             var comiss = new AbsolutCommission() { Commission = 10 };
             comiss.Execute(sec);
-            
-            #endregion            
+
+            #endregion
 
             #region Trading
+
+            bool stopMoveFlag = false;
 
             for (int i = chPeriod + 1; i < ctx.BarsCount; i++)
             {
@@ -46,30 +49,39 @@ namespace Day_11
                 //Отобрали позы, начинающийся с LE
                 var lePos = sec.Positions.GetActiveForBar(i).Where(p => p.EntrySignalName.StartsWith("LE")).ToList();
 
-
                 if (le == null)
                 {
                     sec.Positions.BuyIfGreater(i + 1, 1, highChanel[i], 50, "LE");
+                    stopMoveFlag = false;
                 }
                 else
                 {
                     //пробуем нарастить позу
                     if (leAdd == null)
                     {
-                    var posAddPrice = le.EntryPrice * (1 + posAdd / 100.0);
-                    sec.Positions.BuyIfGreater(i + 1, 1, posAddPrice, "LEadd");
+                        var posAddPrice = le.EntryPrice * (1 + posAdd / 100.0);
+                        sec.Positions.BuyIfGreater(i + 1, 1, posAddPrice, "LEadd");
                     }
 
                     var avgEntry = lePos.AvgEntryPrice();
-                    var stopLoss = avgEntry * (1 - stop / 100.0);
-                    var takeprofit = avgEntry * (1 + take / 100.0);
 
-                    foreach (var p in lePos)
+                    //take
+                    var takeprofit = avgEntry * (1 + take / 100.0);
+                    lePos.ForEach(p => p.CloseAtProfit(i + 1, takeprofit, "LXP"));
+
+                    //stop
+                    var stopMovePrice = avgEntry * (1 + stopMove / 100.0);
+                    if (sec.Bars[i].High > stopMovePrice || stopMoveFlag == true)
                     {
-                        p.CloseAtStop(i + 1, stopLoss, "LXS");
-                        p.CloseAtProfit(i + 1, takeprofit, "LXP");
+                        stopMoveFlag = true;
+                        var stoploss = avgEntry;
+                        lePos.ForEach(p => p.CloseAtStop(i + 1, stoploss, "LXSmoved"));
                     }
-                    
+                    else
+                    {
+                        var stopLoss = avgEntry * (1 - stop / 100.0);
+                        lePos.ForEach(p=> p.CloseAtStop(i + 1, stopLoss, "LXS"));
+                    }
                 }
             }
 
@@ -90,7 +102,7 @@ namespace Day_11
             lst = pane.AddList(lowChanel.ToString(), lowChanel, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
             #endregion
-            
+
         }
     }
 }

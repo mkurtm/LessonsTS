@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using TSLab.Script;
 using TSLab.Script.Handlers;
 
-namespace ConsoleApp1
+namespace ConsoleApp1   
 {
     /// <summary>
     /// Вспомогательный класс, содержащий хелпер методы. В том числе и методы расширения.
@@ -152,6 +153,29 @@ namespace ConsoleApp1
         public static bool IsBlack(this Bar candle)
         {
             return (candle.Close > candle.Open);
+        }
+
+        public static double PosSize(this IPosition pos)
+        {
+            return pos.Shares * pos.Security.LotSize;
+        }
+
+        public static double PositionEntryPrice(this IPosition pos)
+        {
+            return pos.EntryPrice * pos.PosSize();
+        }
+
+        public static double AvgEntryPrice(this IList<IPosition> positions)
+        {
+            var totalPrice = positions.Sum(p => p.PositionEntryPrice());
+            var totalSize = positions.Sum(p => p.PosSize());
+
+            return totalPrice / totalSize;
+        }
+
+        public static double TotalSize(this IList<IPosition> positions)
+        {
+            return positions.Sum(p => p.PosSize());
         }
     }
 }

@@ -8,6 +8,7 @@ using TSLab.Script;
 using TSLab.Script.Handlers;
 using TSLab.Script.Helpers;
 using TSLab.Script.Optimization;
+using TSLab.DataSource;
 
 namespace Day_11
 {
@@ -28,10 +29,16 @@ namespace Day_11
         {
             #region Init indicators and Setups
 
+            //Проверка правильности базового таймфрейма
+            if (sec.IntervalInstance != new Interval(5, DataIntervals.MINUTE))
+                throw new InvalidOperationException("Работаем только на 5 минутках!");
+
             var highChanel = ctx.GetData("highest", new string[] { chPeriod.ToString() },
                                         () => Series.Highest(sec.HighPrices, chPeriod));
             var lowChanel = ctx.GetData("lowest", new string[] { chPeriod.ToString() },
                                () => Series.Lowest(sec.LowPrices, chPeriod));
+            var daySec = sec.CompressTo(new Interval(1, DataIntervals.DAYS));
+
 
             //Set commiss
             var comiss = new AbsolutCommission() { Commission = 10 };

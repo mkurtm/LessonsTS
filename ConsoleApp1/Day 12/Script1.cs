@@ -10,17 +10,13 @@ using TSLab.Script.Optimization;
 using TSLab.DataSource;
 using ConsoleApp1;
 
-namespace Day_12_Repeat
+namespace Day_12
 {
-    [HandlerCategory("Marat")]
-    [HandlerName ("First")]
-    [HandlerDecimals(3)]
-
-    public class Class1 : IDouble2DoubleHandler
-    {     
-        public IList<double> Execute(IList<double> source)
+    public class Script1 : IExternalScript
+    {
+        public void Execute(IContext ctx, ISecurity sec)
         {
-            return source;
+            
         }
     }
 }

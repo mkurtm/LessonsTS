@@ -106,6 +106,42 @@ namespace Day_11
                                 return daySec.Decompress(h);
                             });
 
+            //Создаем два массива с направлениями скользящих
+            List<bool> isDayUP = new List<bool>();
+            isDayUP.Add(false);
+            bool isUpDay = false;
+            for (int i = 1; i < ctx.BarsCount; i++)
+            {
+                if (sec.Bars[i].Date.Day > sec.Bars[i - 1].Date.Day)
+                {
+                    if (sma24day[i] > sma24day[i - 1])
+                        isUpDay = true;
+                    else
+                        isUpDay = false;
+                    isDayUP.Add(isUpDay);
+                }
+                else
+                    isDayUP.Add(isUpDay);
+            }
+
+            List<bool> isHourUP = new List<bool>();
+            isHourUP.Add(false);
+            bool isUpHour = false;
+            for (int i = 1; i < ctx.BarsCount; i++)
+            {
+                if (sec.Bars[i].Date.Hour > sec.Bars[i - 1].Date.Hour)
+                {
+                    if (sma14hour[i] > sma14hour[i - 1])
+                        isUpHour = true;
+                    else
+                        isUpHour = false;
+                    isHourUP.Add(isUpHour);
+                }
+                else
+                    isHourUP.Add(isUpHour);
+            }
+
+
 
             //flags
 
@@ -113,6 +149,9 @@ namespace Day_11
             bool isHourUp = false;
 
             #endregion
+
+
+
 
 
             #region Trading          
@@ -128,6 +167,13 @@ namespace Day_11
 
                 if (sec.Bars[i].Date.Hour > sec.Bars[i - 1].Date.Hour)
                     isHourUp = sma14hour[i] > sma14hour[i - 1] ? true : false;
+
+
+
+
+
+
+
 
                 if (le == null)
                 {
@@ -166,6 +212,9 @@ namespace Day_11
             lst = pane.AddList("sma12", sma12, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList("sma14h", sma14hour, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList("sma24d", sma24day, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+
+            // lst = pane.AddList("IS", isDayUP, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.LEFT);
+            lst = pane.AddList("IS", isHourUP, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.LEFT);
 
             #endregion
         }

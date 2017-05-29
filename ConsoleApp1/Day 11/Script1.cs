@@ -17,9 +17,6 @@ namespace Day_11
 
         #region Task
 
-        //Не решена 1 задача:
-        //    1. Расчет комиссии если есть прибыль.
-        
         //Вход в позицию производится тогда, когда SMA
         //периода 24 на дневном тайм фрейме направлена вверх, SMA 14 на
         //часовом смотрит вверх и цена пересекает снизу вверх SMA 12
@@ -35,7 +32,7 @@ namespace Day_11
         //Если удержание больше 10 бар и нет прибыли, то просто за вход и
         //выход по 5 пунктов.Если удержание было меньше 10 бар, то
         //комиссия просто по 2 пункта за вход и выход.        
-        
+
         //1. Entry:
         //SMA 24 on Daily is UP
         //SMA 14 on Hour is UP
@@ -69,28 +66,32 @@ namespace Day_11
         {
             #region Indic and Setups
 
-            //comiss
-
-            //sec.Commission = (pos, entry) =>
-            //{
-            //    if (entry)
-            //        return 0;
-            //    if (pos.BarsHeld > 10)
-            //        return pos.Shares * pos.Security.LotSize * 20;
-            //    else if (pos.ProfitPct() < 0)
-            //        return pos.Shares * pos.Security.LotSize * 10;
-            //    else
-            //        return pos.Shares * pos.Security.LotSize * 4;
-            //};
+            //comiss         
 
             sec.Commission = (pos, entry) =>
             {
-                if (pos.BarsHeld > 10)
-                    return pos.Shares * pos.Security.LotSize * 20;
+                if (!entry)
+                {
+                    if (pos.BarsHeld > 10)
+                    {
+                        if (pos.EntryPrice < pos.ExitPrice && pos.EntrySignalName.StartsWith ("LE"))
+                            return pos.Shares * pos.Security.LotSize * pos.EntryPrice * (0.03 / 100);
+                        else if (pos.EntryPrice > pos.ExitPrice && pos.EntrySignalName.StartsWith("SE"))
+                            return pos.Shares * pos.Security.LotSize * pos.EntryPrice * (0.03 / 100);
+                        else
+                            return pos.Shares * pos.Security.LotSize * 5;
+                    }
+                    else
+                        return pos.Shares * pos.Security.LotSize * 2;
+                }
                 else
-                    return pos.Shares * pos.Security.LotSize * 4;
+                {
+                    if (pos.BarsHeld > 10)
+                        return pos.Shares * pos.Security.LotSize * 5;
+                    else
+                        return pos.Shares * pos.Security.LotSize * 2;
+                }
             };
-
 
             //indics
 
@@ -113,39 +114,42 @@ namespace Day_11
                             });
 
             //Создаем два массива с направлениями скользящих
-            List<bool> isDayUP = new List<bool>();
-            isDayUP.Add(false);
-            bool isUpDay = false;
-            for (int i = 1; i < ctx.BarsCount; i++)
-            {
-                if (sec.Bars[i].Date.Day > sec.Bars[i - 1].Date.Day)
-                {
-                    if (sma24day[i] > sma24day[i - 2])
-                        isUpDay = true;
-                    else
-                        isUpDay = false;
-                    isDayUP.Add(isUpDay);
-                }
-                else
-                    isDayUP.Add(isUpDay);
-            }
+            //Второе решение. Первое более простое. Если только не появиться 
+            //завести в кэш данные массивы. Тогда лучше сделать так.
 
-            List<bool> isHourUP = new List<bool>();
-            isHourUP.Add(false);
-            bool isUpHour = false;
-            for (int i = 1; i < ctx.BarsCount; i++)
-            {
-                if (sec.Bars[i].Date.Hour > sec.Bars[i - 1].Date.Hour)
-                {
-                    if (sma14hour[i] > sma14hour[i - 2])
-                        isUpHour = true;
-                    else
-                        isUpHour = false;
-                    isHourUP.Add(isUpHour);
-                }
-                else
-                    isHourUP.Add(isUpHour);
-            }
+            //List<bool> isDayUP = new List<bool>();
+            //isDayUP.Add(false);
+            //bool isUpDay = false;
+            //for (int i = 1; i < ctx.BarsCount; i++)
+            //{
+            //    if (sec.Bars[i].Date.Day > sec.Bars[i - 1].Date.Day)
+            //    {
+            //        if (sma24day[i] > sma24day[i - 2])
+            //            isUpDay = true;
+            //        else
+            //            isUpDay = false;
+            //        isDayUP.Add(isUpDay);
+            //    }
+            //    else
+            //        isDayUP.Add(isUpDay);
+            //}
+
+            //List<bool> isHourUP = new List<bool>();
+            //isHourUP.Add(false);
+            //bool isUpHour = false;
+            //for (int i = 1; i < ctx.BarsCount; i++)
+            //{
+            //    if (sec.Bars[i].Date.Hour > sec.Bars[i - 1].Date.Hour)
+            //    {
+            //        if (sma14hour[i] > sma14hour[i - 2])
+            //            isUpHour = true;
+            //        else
+            //            isUpHour = false;
+            //        isHourUP.Add(isUpHour);
+            //    }
+            //    else
+            //        isHourUP.Add(isUpHour);
+            //}
 
             //flags
 
@@ -189,7 +193,7 @@ namespace Day_11
             }
 
             #endregion
-        
+
             #region Drawing
 
             if (ctx.IsOptimization)

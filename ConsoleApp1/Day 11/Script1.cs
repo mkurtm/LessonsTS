@@ -17,11 +17,9 @@ namespace Day_11
 
         #region Task
 
-        //Не решены 2 задачи:
+        //Не решена 1 задача:
         //    1. Расчет комиссии если есть прибыль.
-        //    2. Направление скользящих старших таймфреймов.
-
-
+        
         //Вход в позицию производится тогда, когда SMA
         //периода 24 на дневном тайм фрейме направлена вверх, SMA 14 на
         //часовом смотрит вверх и цена пересекает снизу вверх SMA 12
@@ -37,7 +35,7 @@ namespace Day_11
         //Если удержание больше 10 бар и нет прибыли, то просто за вход и
         //выход по 5 пунктов.Если удержание было меньше 10 бар, то
         //комиссия просто по 2 пункта за вход и выход.        
-        ///
+        
         //1. Entry:
         //SMA 24 on Daily is UP
         //SMA 14 on Hour is UP
@@ -85,6 +83,14 @@ namespace Day_11
             //        return pos.Shares * pos.Security.LotSize * 4;
             //};
 
+            sec.Commission = (pos, entry) =>
+            {
+                if (pos.BarsHeld > 10)
+                    return pos.Shares * pos.Security.LotSize * 20;
+                else
+                    return pos.Shares * pos.Security.LotSize * 4;
+            };
+
 
             //indics
 
@@ -114,7 +120,7 @@ namespace Day_11
             {
                 if (sec.Bars[i].Date.Day > sec.Bars[i - 1].Date.Day)
                 {
-                    if (sma24day[i] > sma24day[i - 1])
+                    if (sma24day[i] > sma24day[i - 2])
                         isUpDay = true;
                     else
                         isUpDay = false;
@@ -131,7 +137,7 @@ namespace Day_11
             {
                 if (sec.Bars[i].Date.Hour > sec.Bars[i - 1].Date.Hour)
                 {
-                    if (sma14hour[i] > sma14hour[i - 1])
+                    if (sma14hour[i] > sma14hour[i - 2])
                         isUpHour = true;
                     else
                         isUpHour = false;
@@ -141,18 +147,12 @@ namespace Day_11
                     isHourUP.Add(isUpHour);
             }
 
-
-
             //flags
 
             bool isDayUp = false;
             bool isHourUp = false;
 
             #endregion
-
-
-
-
 
             #region Trading          
 
@@ -163,17 +163,10 @@ namespace Day_11
 
                 //Проверка направленности старших ТФ
                 if (sec.Bars[i].Date.Day > sec.Bars[i - 1].Date.Day)
-                    isDayUp = sma24day[i] > sma24day[i - 1] ? true : false;
+                    isDayUp = sma24day[i] > sma24day[i - 2] ? true : false;
 
                 if (sec.Bars[i].Date.Hour > sec.Bars[i - 1].Date.Hour)
-                    isHourUp = sma14hour[i] > sma14hour[i - 1] ? true : false;
-
-
-
-
-
-
-
+                    isHourUp = sma14hour[i] > sma14hour[i - 2] ? true : false;
 
                 if (le == null)
                 {
@@ -196,8 +189,7 @@ namespace Day_11
             }
 
             #endregion
-
-
+        
             #region Drawing
 
             if (ctx.IsOptimization)
@@ -213,8 +205,9 @@ namespace Day_11
             lst = pane.AddList("sma14h", sma14hour, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList("sma24d", sma24day, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
+            //Вывод на панель направления скользящих старших таймфреймов.
             // lst = pane.AddList("IS", isDayUP, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.LEFT);
-            lst = pane.AddList("IS", isHourUP, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.LEFT);
+            //lst = pane.AddList("IS", isHourUP, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.LEFT);
 
             #endregion
         }

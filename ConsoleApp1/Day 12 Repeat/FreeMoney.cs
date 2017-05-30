@@ -25,6 +25,7 @@ namespace Day_12_Repeat
                     freeDepo += position.Profit();
             }
             return freeDepo;
+
         }
     }
 }

@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuyVolumes.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Class2.cs" />
     <Compile Include="currentPosByCycle.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="MaePct.cs" />
     <Compile Include="MultiplyK.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueLevel.cs" />
     <Compile Include="SampleStreamHandler.cs" />
     <Compile Include="SampleValuesHandler.cs" />
     <Compile Include="sma.cs" />

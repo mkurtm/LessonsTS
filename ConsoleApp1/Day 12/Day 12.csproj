@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="KeltnerChanelDown.cs" />
     <Compile Include="KeltnerChanelUp.cs" />
+    <Compile Include="LossQty.cs" />
+    <Compile Include="ProfitQty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

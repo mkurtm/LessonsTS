@@ -8,6 +8,7 @@ using TSLab.Script.Handlers;
 using TSLab.Script.Helpers;
 using TSLab.Script.Optimization;
 using TSLab.DataSource;
+using ConsoleApp1;
 
 namespace Day_12
 {
@@ -22,19 +23,22 @@ namespace Day_12
         [HandlerParameter(Name = "Коэффициент", Default = "1")]
         public double K { get; set; }
 
-       
+
         public IList<double> Execute(ISecurity sec)
         {
-            List<double> Chanel= new List<double>();
+            List<double> Chanel = new List<double>();
 
             var sma = Series.SMA(sec.ClosePrices, Period);
             var atr = Series.AverageTrueRange(sec.Bars, Period);
 
             for (int i = 0; i < sec.Bars.Count; i++)
             {
-                Chanel.Add(sma[i]+atr[i]* K);
+                Chanel.Add(sma[i] + atr[i] * K);
             }
-            return Chanel;         
+            return Chanel;
         }
     }
+
+    
+
 }

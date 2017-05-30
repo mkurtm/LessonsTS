@@ -38,10 +38,10 @@ namespace Day_12_Repeat
 
             var result = 0.0;
 
-            if (_level > 0 && buyQ.Count >= Math.Abs(_level))     
+            if (Level > 0 && buyQ.Count >= Math.Abs(Level))     
                 result = buyQ[-Level - 1].Price;
         
-            if (_level < 0 && buyQ.Count >= Math.Abs(_level))            
+            if (Level < 0 && sellQ.Count >= Math.Abs(Level))            
                 result = sellQ[Level - 1].Price;            
     
             for (int i = 0; i < values.Length; i++)          

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="alglibnet2">
+      <HintPath>..\..\..\..\..\Downloads\alglib-3.11.0.csharp.gpl\csharp\alglibnet2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -57,6 +60,7 @@
     <Compile Include="AdaptiveSMABest.cs" />
     <Compile Include="OICandles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TradeHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

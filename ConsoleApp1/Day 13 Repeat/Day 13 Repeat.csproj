@@ -61,6 +61,7 @@
     <Compile Include="Correlation.cs" />
     <Compile Include="OICandles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoreDataSaveLoadStatic.cs" />
     <Compile Include="StoreDataStatic.cs" />
     <Compile Include="TradeHelper.cs" />
   </ItemGroup>

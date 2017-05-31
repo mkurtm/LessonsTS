@@ -14,7 +14,7 @@ namespace Day_13_Repeat
 
         public void Execute(IContext ctx, ISecurity sec)
         {
-            _counter++;            
+            _counter++;
             ctx.LogInfo("{0}", _counter);
         }
     }

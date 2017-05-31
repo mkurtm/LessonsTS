@@ -107,12 +107,15 @@ namespace ConsoleApp1
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="str"></param>
-        public static void LogInfo(this IContext ctx, string str)
+        public static void LogInfo(this IContext ctx, string str, params object[] args)
         {
             // Задаем цвет соообщения
-            var color = new Color(System.Drawing.Color.Blue.ToArgb());
+            var color = System.Drawing.Color.Blue;
 
-            ctx.Log(str, color);
+            // Формируем строку, вставляем спец слово Info.
+            var msg = string.Format("Info: " + str, args);
+
+            ctx.Log(msg, new Color(color.ToArgb()));
         }
 
         public static bool IsMaribozu(this Bar candle)

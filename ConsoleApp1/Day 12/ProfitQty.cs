@@ -25,54 +25,39 @@ namespace Day_12
         }
     }
 
-    //[HandlerCategory("Marat")]
-    //[HandlerName("ProfitQty")]
-    //public class ProfitQty : IBar2ValueDoubleHandler
-    //{
-    //    [HandlerParameter(Name = "Минимальный профит", Default = "1")]
-    //    public double K { get; set; }
+    [HandlerCategory("Marat")]
+    [HandlerName("MAEDate")]
+    public class MAEDate :  IPosition2Double
+    //public class MAEDate : IOneSourceHandler, IValuesHandler, IPositionInputs, IDoubleReturns
+    {
+        public double Execute(IPosition pos, int barNum)
+        {
+            if (pos == null)
+            {
+                return 0.0;
+            }            
+            return (double)(pos.MAEDate().Year % 100) * 10000.0 + (double)pos.MAEDate().Month * 100.0 + (double)pos.MAEDate().Day;            
+        }           
+    }
 
-    //    public double Execute(ISecurity sec, int barNum)
-    //    {
-    //        var count = 0;
-    //        for (int i = 0; i < barNum; i++)
-    //        {
-    //            var positions = sec.Positions.GetClosedOrActiveForBar(i);
-    //            foreach (var pos in positions)
-    //                if (pos.ProfitPct() > K)
-    //                    count++;
-    //        }
-    //        return count;
-    //    }
-    //}
-
-    //[HandlerCategory("Marat")]
-    //[HandlerName("ProfitQty2")]
-    //public class ProfitQty2 : IBar2DoubleHandler
-    //{
-    //    [HandlerParameter(Name = "Минимальный профит", Default = "1")]
-    //    public double M { get; set; }
-
-    //    public IList<double> Execute(ISecurity sec)
-    //    {
-    //        var numPlus = new List<Double>();
-
-    //        for (int i = 0; i < sec.Bars.Count; i++)
-    //        {
-    //            var count = 0;
-    //            var positions = sec.Positions.GetClosedOrActiveForBar(i);
-
-    //            foreach (var pos in positions)
-    //                if (pos.ProfitPct() > M)
-    //                    count++;
-
-    //            numPlus.Add(count);
-    //        }
-    //        return numPlus;
-    //    }
-    //}           
-        
- 
+    [HandlerCategory("Marat")]
+    [HandlerName("MAETime")]
+    public class MAETime : IPosition2Double
+    //public class MAETime : IOneSourceHandler, IValuesHandler, IPositionInputs, IDoubleReturns
+    //public class SampleValuesHandler : IOneSourceHandler, IValuesHandler, IDoubleInputs, IDoubleReturns
+    {
+        public double Execute(IPosition pos, int barNum)
+        {
+            if (pos == null)
+            {
+                return 0.0;
+            }
+            return (double)pos.MAEDate().Hour * 10000.0 + (double)pos.MAEDate().Minute * 100.0 + (double)pos.MAEDate().Second;
+        }
+    }
 }
+
+
+
    
 

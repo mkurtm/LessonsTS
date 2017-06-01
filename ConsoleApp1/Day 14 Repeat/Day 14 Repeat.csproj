@@ -53,8 +53,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InitDepo.cs" />
+    <Compile Include="ISecRT.cs" />
     <Compile Include="ProfitAtThisDay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleScript.cs" />
     <Compile Include="TradeHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,6 +2,8 @@
 using TSLab.Script.Handlers;
 using TSLab.Script.Realtime;
 using TSLab.DataSource;
+using System.Linq;
+using TSLab.Script.Realtime;
 
 namespace Day_14_Repeat
 {
@@ -15,6 +17,13 @@ namespace Day_14_Repeat
                 ctx.LogInfo("Мы в лабаратории");
             else
                 ctx.LogInfo("We are at the agent");
+
+            var pos = sec.Positions.Where(p => p.IsActive);
+            foreach (var position in pos)
+            {
+                var rtPos = position as IPositionRt;
+                var entry = rtPos.EntryOrders;
+            }
 
             var bid = sec.FinInfo.Bid;
             var ask = sec.FinInfo.Ask;

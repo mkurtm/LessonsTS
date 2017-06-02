@@ -19,13 +19,6 @@ namespace Day_14_Repeat
 
             var crossCount = sec.ClosePrices.CrossCount(sma, detectPeriod);
 
-            for (int i = smaPeriod; i < ctx.BarsCount; i++)
-            {
-
-            }
-
-
-
             #region Drawing
 
             if (ctx.IsOptimization)

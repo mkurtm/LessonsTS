@@ -57,8 +57,11 @@
     <Compile Include="ISecRT.cs" />
     <Compile Include="ProfitAtThisDay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RealTimeOrders.cs" />
     <Compile Include="SampleScript.cs" />
     <Compile Include="TradeHelper.cs" />
+    <Compile Include="TradeHelper1.cs" />
+    <Compile Include="TrendDetection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

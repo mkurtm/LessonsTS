@@ -23,7 +23,12 @@ namespace My
             return result;
         }
 
-      
+        public static bool isUnderMT (this ISecurity sec, IList<double> smaBig, int barNum)
+        {
+            if (sec.Bars[barNum].Close < smaBig[barNum] && sec.Bars[barNum].Open < smaBig[barNum])
+                return true;
+            else return false;
+        }
 
         public static void LogInfo(this IContext ctx, string str, params object[] args)
         {

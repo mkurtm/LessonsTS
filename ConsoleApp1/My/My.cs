@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TSLab.DataSource;
 using TSLab.Script;
 using TSLab.Script.Handlers;
 using TSLab.Script.Helpers;
@@ -58,12 +59,39 @@ namespace My
                 () => MyHelper.KeltnerChanel(smaSmall, atr, dCh0Delta));
 
             #endregion
+
+            #region Checks & Setups
+
+            if (sec.IntervalInstance != new Interval(5, DataIntervals.MINUTE))
+                throw new ArgumentException("Работаем только на 5 мин.");
+
+            var comiss = new AbsolutCommission() { Commission = (10 + (double)sec.Tick * 6.0) };
+            comiss.Execute(sec);
+
+            #endregion
+
+            #region Trading
+
+            for (int i = 0; i < ctx.BarsCount; i++)
+            {
+                var se = sec.Positions.GetLastActiveForSignal("SE");
+
+                if (se == null)
+                {
+                    if (sec.isUnderMT(smaBig, i))
+                    {
+                        sec.Positions.SellAtMarket(i + 1, 1, "SE");
+                    }
+                }
+
+                else
+                {
+                    se.CloseAtMarket(i + 10, "SX");
+                }
+            }
+
+            #endregion
             
-
-
-
-
-
             #region Drawing
 
             if (ctx.IsOptimization)
@@ -79,7 +107,7 @@ namespace My
 
             color = new Color(System.Drawing.Color.White.ToArgb());
             lst = pane.AddList(sec.ToString(), "smaSmall", smaSmall, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
-            
+
             color = new Color(System.Drawing.Color.CornflowerBlue.ToArgb());
             lst = pane.AddList(sec.ToString(), "smaBig", smaBig, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst.Thickness = 2;
@@ -100,7 +128,7 @@ namespace My
             lst = pane.AddList(sec.ToString(), "K", uCh0, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(sec.ToString(), "K", dCh0, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
-            pane = ctx.CreateGraphPane("vol", "v",  false);
+            pane = ctx.CreateGraphPane("vol", "v", false);
             pane.HideLegend = true;
             color = new Color(System.Drawing.Color.Red.ToArgb());
             lst = pane.AddList("vol", "11", sec.Volumes, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.RIGHT);

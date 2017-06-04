@@ -18,6 +18,7 @@ namespace My
 
         public OptimProperty smaPeriodSmall = new OptimProperty(20, 10, 100, 5);
         public OptimProperty smaPeriodBig = new OptimProperty(220, 100, 500, 10);
+        public OptimProperty smaPeriodHuge = new OptimProperty(3120, 2000, 5000, 50);
         public OptimProperty atrPeriod = new OptimProperty(20, 10, 100, 5);
         public OptimProperty uCh6Delta = new OptimProperty(6, 0, 10, 0.1);
         public OptimProperty dCh6Delta = new OptimProperty(-6, -10, 0, 0.1);
@@ -27,6 +28,8 @@ namespace My
         public OptimProperty dCh1Delta = new OptimProperty(-1.33, -10, 0, 0.1);
         public OptimProperty uCh0Delta = new OptimProperty(0.33, 0, 10, 0.1);
         public OptimProperty dCh0Delta = new OptimProperty(-0.33, -10, 0, 0.1);
+        public OptimProperty deltaPcntMT = new OptimProperty(1, 0, 5, 0.25);
+        public OptimProperty takePcnt = new OptimProperty(1, 0, 30, 0.25);
 
         #endregion
 
@@ -39,6 +42,8 @@ namespace My
                 () => Series.SMA(sec.ClosePrices, smaPeriodSmall));
             var smaBig = ctx.GetData("smaBig", new string[] { },
                 () => Series.SMA(sec.ClosePrices, smaPeriodBig));
+            var smaHuge = ctx.GetData("smaHuge", new string[] { },
+                () => Series.SMA(sec.ClosePrices, smaPeriodHuge));
             var atr = ctx.GetData("atr", new string[] { },
                 () => Series.AverageTrueRange(sec.Bars, atrPeriod));
             var uCh6 = ctx.GetData("uch6", new string[] { },
@@ -75,23 +80,48 @@ namespace My
             for (int i = 0; i < ctx.BarsCount; i++)
             {
                 var se = sec.Positions.GetLastActiveForSignal("SE");
+                var le = sec.Positions.GetLastActiveForSignal("LE");
 
-                if (se == null)
+                //if (se == null)
+                //{
+                //    if ((sec.isUnderSMA(smaHuge,i) || sec.isUnderSMA(smaBig, i)) 
+                //        && sec.isNearSMA(smaBig,i,deltaPcntMT))
+                //    {
+                //        if (sec.Bars[i].Close < smaSmall[i] && sec.Bars[i].Open > smaSmall[i])
+                //        {
+                //            sec.Positions.SellAtMarket(i + 1, 1, "SE");
+                //        }
+                //    }
+                //}
+
+                //else
+                //{
+                //    se.CloseAtStop(i + 1, uCh2[i] > se.EntryPrice ? uCh2[i] : se.EntryPrice, "SX");
+                //    se.CloseAtProfit(i + 1, se.EntryPrice*(1-(takePcnt/100.0)), "SP");
+                //}
+
+
+                if (le == null)
                 {
-                    if (sec.isUnderMT(smaBig, i))
+                    if ((sec.isAboveSMA(smaHuge, i) || sec.isAboveSMA(smaBig, i)) &&
+                        sec.isNearSMA(smaBig, i, deltaPcntMT))
                     {
-                        sec.Positions.SellAtMarket(i + 1, 1, "SE");
+                        if (sec.Bars[i].Close > smaSmall[i] && sec.Bars[i].Open < smaSmall[i])
+                        {
+                            sec.Positions.BuyAtMarket(i + 1, 1, "LE");
+                        }
                     }
                 }
 
                 else
                 {
-                    se.CloseAtMarket(i + 10, "SX");
+                    le.CloseAtStop(i + 1, dCh2[i] < le.EntryPrice ? dCh2[i] : le.EntryPrice, "LX");
+                    le.CloseAtProfit(i + 1, le.EntryPrice*(1 + (takePcnt/100.0)), "LP");
                 }
             }
 
             #endregion
-            
+
             #region Drawing
 
             if (ctx.IsOptimization)
@@ -111,6 +141,10 @@ namespace My
             color = new Color(System.Drawing.Color.CornflowerBlue.ToArgb());
             lst = pane.AddList(sec.ToString(), "smaBig", smaBig, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst.Thickness = 2;
+
+            color = new Color(System.Drawing.Color.Red.ToArgb());
+            lst = pane.AddList(sec.ToString(), "smaHuge", smaHuge, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+            lst.Thickness = 3;
 
             color = new Color(System.Drawing.Color.Red.ToArgb());
             lst = pane.AddList(sec.ToString(), "K", uCh6, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);

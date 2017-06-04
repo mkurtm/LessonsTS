@@ -23,11 +23,26 @@ namespace My
             return result;
         }
 
-        public static bool isUnderMT (this ISecurity sec, IList<double> smaBig, int barNum)
+        public static bool isUnderSMA(this ISecurity sec, IList<double> smaBig, int barNum)
         {
             if (sec.Bars[barNum].Close < smaBig[barNum] && sec.Bars[barNum].Open < smaBig[barNum])
                 return true;
             else return false;
+        }
+
+        public static bool isAboveSMA(this ISecurity sec, IList<double> smaBig, int barNum)
+        {
+            if (sec.Bars[barNum].Close > smaBig[barNum] && sec.Bars[barNum].Open > smaBig[barNum])
+                return true;
+            else return false;
+        }
+
+        public static bool isNearSMA(this ISecurity sec, IList<double> smaBig, int barNum, double deltaPcnt)
+        {
+            if ((Math.Abs(sec.Bars[barNum].Close - smaBig[barNum]) / smaBig[barNum]) * 100 <= deltaPcnt)
+                return true;
+            else
+                return false;
         }
 
         public static void LogInfo(this IContext ctx, string str, params object[] args)
@@ -38,7 +53,7 @@ namespace My
             // Формируем строку, вставляем спец слово Info.
             var msg = string.Format("Info: " + str, args);
 
-            ctx.Log (msg, new Color(color.ToArgb()));
+            ctx.Log(msg, new Color(color.ToArgb()));
         }
     }
 }

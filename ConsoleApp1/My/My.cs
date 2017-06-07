@@ -30,10 +30,13 @@ namespace My
         public OptimProperty uCh0Delta = new OptimProperty(0.33, 0, 10, 0.1);
         public OptimProperty dCh0Delta = new OptimProperty(-0.33, -10, 0, 0.1);
 
-        public OptimProperty deltaPcntMT = new OptimProperty(1, 0, 5, 0.25);
+        public OptimProperty deltaAboveLT = new OptimProperty(-1.7, -5, 5, 0.1);
+        public OptimProperty deltaAboveMT = new OptimProperty(-0.2, -5, 5, 0.1);
+        public OptimProperty deltaNearMT = new OptimProperty(4.5, 0, 10, 0.25);
+        public OptimProperty barsAgo = new OptimProperty(5, 0, 30, 1);
+
         public OptimProperty takePcnt = new OptimProperty(1, 0, 30, 0.25);
 
-        public OptimProperty barsAgo = new OptimProperty(5, 0, 30, 1);
 
         #endregion
 
@@ -67,8 +70,21 @@ namespace My
             var dCh0 = ctx.GetData("dch0", new string[] { },
                 () => MyHelper.KeltnerChanel(smaSmall, atr, dCh0Delta));
 
-            var cross = ctx.GetData("cross", new string[] { },
+            var isCrossSmaBarsAgo = ctx.GetData("cross", new string[] { },
                 () => sec.IsCrossSmaBarsAgoAll(smaSmall, barsAgo));
+            var isAboveLTDelta = ctx.GetData("IsAboveLTDelta", new string[] { },
+                () => sec.isAboveSMADeltaAll(smaHuge, deltaAboveLT));
+            var isAboveMTDelta = ctx.GetData("IsAboveMTDelta", new string[] { },
+                () => sec.isAboveSMADeltaAll(smaBig, deltaAboveMT));
+            var isUnderLT = ctx.GetData("IsUnderLT", new string[] { },
+                () => sec.isUnderSMADeltaAll(smaHuge, 0));
+            var isNearMT = ctx.GetData("isNearMT", new string[] { },
+                () => sec.isNearSMAAll(smaHuge, deltaNearMT));
+            var isTime = ctx.GetData("isTime", new string[] { },
+                () => sec.isInTimeSpanAll(new TimeSpan(10, 00, 00), new TimeSpan(23, 30, 30)));
+
+
+
 
             #endregion
 
@@ -101,7 +117,7 @@ namespace My
 
             //Последняя позиция
             var timeLastHnd = new LastClosedPositionExitTime();
-            var dateLastHnd = new LastClosedPositionExitDate();  
+            var dateLastHnd = new LastClosedPositionExitDate();
 
             #endregion
 
@@ -115,25 +131,22 @@ namespace My
                 var timeLast = timeLastHnd.Execute(sec, i);
                 var dateLast = dateLastHnd.Execute(sec, i);
 
+                //Позиции
+
                 var se = sec.Positions.GetLastActiveForSignal("SE");
-                var le = sec.Positions.GetLastActiveForSignal("LE");                                     
+                var le = sec.Positions.GetLastActiveForSignal("LE");
+
+                //Фильтры                                      
                 
                 if (le == null)
                 {
                     if (
-                       
-
-                        (sec.isAboveSMA(smaHuge, i) || sec.isAboveSMA(smaBig, i)) &&
-                        sec.isNearSMA(smaBig, i, deltaPcntMT)
-                        
-                        
+                        isCrossSmaBarsAgo[i] &&
+                        isTime[i] &&
+                        isNearMT[i] &&
+                        (isAboveLTDelta[i] || (isUnderLT[i] && isAboveMTDelta[i]))
                         )
-                    {
-                        if (sec.Bars[i].Close > smaSmall[i] && sec.Bars[i].Open < smaSmall[i])
-                        {
-                            sec.Positions.BuyAtMarket(i + 1, 1, "LE");
-                        }
-                    }
+                        sec.Positions.BuyIfLess(i + 1, 1, uCh0[i], "LE");
                 }
 
                 else
@@ -185,20 +198,20 @@ namespace My
             lst = pane.AddList(sec.ToString(), "K", uCh0, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(sec.ToString(), "K", dCh0, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
-            pane = ctx.CreateGraphPane("vol", "v", false);
-            pane.HideLegend = true;
-            color = new Color(System.Drawing.Color.Red.ToArgb());
-            lst = pane.AddList("vol", "11", sec.Volumes, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.RIGHT);
+            //pane = ctx.CreateGraphPane("vol", "v", false);
+            //pane.HideLegend = true;
+            //color = new Color(System.Drawing.Color.Red.ToArgb());
+            //lst = pane.AddList("vol", "11", sec.Volumes, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.RIGHT);
 
-            pane = ctx.CreateGraphPane("atr", "atr", false);
-            pane.HideLegend = true;
-            color = new Color(System.Drawing.Color.Red.ToArgb());
-            lst = pane.AddList("vol", "11", atr, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+            //pane = ctx.CreateGraphPane("atr", "atr", false);
+            //pane.HideLegend = true;
+            //color = new Color(System.Drawing.Color.Red.ToArgb());
+            //lst = pane.AddList("vol", "11", atr, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
-            pane = ctx.CreateGraphPane("cross", "cross", false);
-            pane.HideLegend = true;
-            color = new Color(System.Drawing.Color.Red.ToArgb());
-            lst = pane.AddList("vol", "11", cross, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.RIGHT);
+            //pane = ctx.CreateGraphPane("cross", "cross", false);
+            //pane.HideLegend = true;
+            //color = new Color(System.Drawing.Color.Red.ToArgb());
+            //lst = pane.AddList("vol", "11", IsCrossSmaBarsAgo, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.RIGHT);
 
             #endregion
         }

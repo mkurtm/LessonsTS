@@ -28,6 +28,19 @@ namespace My
             return time >= timeMin && time <= timeMax;
         }
 
+        public static IList<bool> isInTimeSpanAll(this ISecurity sec, TimeSpan timeMin, TimeSpan timeMax)
+        {
+            var list = new List<bool>();
+            for (int i = 0; i < sec.Bars.Count; i++)
+            {
+                if (sec.Bars[i].Date.TimeOfDay >= timeMin && sec.Bars[i].Date.TimeOfDay <= timeMax)
+                    list.Add(true);
+                else
+                    list.Add(false);
+            }
+            return list;            
+        }
+
         public static bool isInTimeDouble(this double time, double timeMin, double timeMax)
         {
             return time >= timeMin && time <= timeMax;
@@ -47,7 +60,47 @@ namespace My
             else return false;
         }
 
-        public static bool isNearSMA(this ISecurity sec, IList<double> smaBig, int barNum, double deltaPcnt)
+        public static bool isUnderSMADelta(this ISecurity sec, IList<double> smaBig, double delta, int barNum)
+        {
+            if (sec.Bars[barNum].High < (smaBig[barNum] * (1 + (delta / 100.0))))
+                return true;
+            else return false;
+        }
+
+        public static bool isAboveSMADelta(this ISecurity sec, IList<double> smaBig, double delta, int barNum)
+        {
+            if (sec.Bars[barNum].Low > (smaBig[barNum] * (1 + (delta / 100.0))))
+                return true;
+            else return false;
+        }
+
+        public static IList<bool> isAboveSMADeltaAll(this ISecurity sec, IList<double> smaBig, double delta)
+        {
+            var list = new List<bool>();
+            for (int i = 0; i < sec.Bars.Count; i++)
+            {
+                if (sec.Bars[i].Low > (smaBig[i] * (1 + (delta / 100.0))))
+                    list.Add(true);
+                else
+                    list.Add(false);
+            }
+            return list ;
+        }
+
+        public static IList<bool> isUnderSMADeltaAll(this ISecurity sec, IList<double> smaBig, double delta)
+        {
+            var list = new List<bool>();
+            for (int i = 0; i < sec.Bars.Count; i++)
+            {
+                if (sec.Bars[i].High < (smaBig[i] * (1 + (delta / 100.0))))
+                    list.Add(true);
+                else
+                    list.Add(false);
+            }
+            return list;            
+        }
+
+        public static bool isNearSMA(this ISecurity sec, IList<double> smaBig, double deltaPcnt, int barNum)
         {
             if ((Math.Abs(sec.Bars[barNum].Close - smaBig[barNum]) / smaBig[barNum]) * 100 <= deltaPcnt)
                 return true;
@@ -55,6 +108,19 @@ namespace My
                 return false;
         }
 
+        public static IList<bool> isNearSMAAll(this ISecurity sec, IList<double> smaBig, double deltaPcnt)
+        {
+            var list = new List<bool>();
+            for (int i = 0; i < sec.Bars.Count; i++)
+            {
+                if ((Math.Abs(sec.Bars[i].Close - smaBig[i]) / smaBig[i]) * 100 <= deltaPcnt)
+                    list.Add(true);
+                else
+                    list.Add(false);
+            }
+            return list;            
+        }
+        
         public static bool isCrossSma(this ISecurity sec, IList<double> sma, int barNum)
         {
             if (barNum != 0)
@@ -87,7 +153,7 @@ namespace My
                     for (int j = i - barsAgo; j < i; j++)
                     {
                         if (listIn[j])
-                            isTrue = true;                        
+                            isTrue = true;
                     }
                 }
 

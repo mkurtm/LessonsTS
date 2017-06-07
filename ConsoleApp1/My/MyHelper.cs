@@ -10,7 +10,7 @@ namespace My
 {
     public static class MyHelper
     {
-        public static IList<double> KeltnerChanel(IList<double> list0, IList<double> list1, double delta)
+        public static IList<double> KeltnerChanel(this IList<double> list0, IList<double> list1, double delta)
         {
             if (list0.Count != list1.Count)
                 throw new ArgumentException("Списки должны быть одинаковой длины.");
@@ -121,7 +121,7 @@ namespace My
             return list;            
         }
         
-        public static bool isCrossSma(this ISecurity sec, IList<double> sma, int barNum)
+        public static bool isCrossSmaUp(this ISecurity sec, IList<double> sma, int barNum)
         {
             if (barNum != 0)
                 return sec.Bars[barNum].Close > sma[barNum] && sec.Bars[barNum - 1].Close < sma[barNum - 1];
@@ -129,12 +129,22 @@ namespace My
 
         }
 
+        public static bool isCrossSmaDown(this ISecurity sec, IList<double> sma, int barNum)
+        {
+            if (barNum != 0)
+                return sec.Bars[barNum].Close < sma[barNum] && sec.Bars[barNum - 1].Close > sma[barNum - 1];
+            return false;
+
+        }
+
+
+
         public static IList<bool> isCrossSmaAll(this ISecurity sec, IList<double> sma)
         {
             var list = new List<bool>();
             for (int i = 0; i < sec.Bars.Count; i++)
             {
-                list.Add(sec.isCrossSma(sma, i));
+                list.Add(sec.isCrossSmaUp(sma, i));
             }
             return list;
         }
@@ -167,7 +177,7 @@ namespace My
             var isCrossSmaBarsAgo = false;
             for (int i = barNum - barsAgo; i < barNum; i++)
             {
-                if (sec.isCrossSma(sma, i))
+                if (sec.isCrossSmaUp(sma, i))
                     isCrossSmaBarsAgo = true;
             }
             return isCrossSmaBarsAgo;

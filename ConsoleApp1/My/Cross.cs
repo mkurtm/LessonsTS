@@ -36,6 +36,8 @@ namespace My
         public OptimProperty takePcntShort = new OptimProperty(7.5, 0, 30, 0.25);
         public OptimProperty takePcntLong = new OptimProperty(2, 0, 30, 0.25);
 
+      //  public OptimProperty maxBars = new OptimProperty(20, 0, 100, 1);
+
 
         #endregion
 
@@ -90,13 +92,16 @@ namespace My
             var stopShort = 0.0;
             var stopLong = 0.0;
 
+                //flat
+           // var flatBarsCount = sec.flatBarsCount(uCh1, uCh2, dCh1, dCh2);
+
             #endregion
 
             #region Trading
 
-            for (int i = smaPeriodHuge; i < ctx.BarsCount; i++)
+            for (int i = 1; i < ctx.BarsCount; i++)
             {
-
+                
                 //Позиции
 
                 var se = sec.Positions.GetLastActiveForSignal("SE");
@@ -105,6 +110,7 @@ namespace My
                 //Торговля   
 
                 if (se == null)
+
                 {
                     if (sec.isCrossSmaDown(smaSmall, i))
                     {
@@ -190,6 +196,11 @@ namespace My
             //pane.HideLegend = true;
             //color = new Color(System.Drawing.Color.Red.ToArgb());
             //lst = pane.AddList("vol", "11", atr, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+
+            //pane = ctx.CreateGraphPane("atr", "atr", false);
+            //pane.HideLegend = true;
+            //color = new Color(System.Drawing.Color.Red.ToArgb());
+            //lst = pane.AddList("vol", "11", flatBarsCount, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
             #endregion
         }

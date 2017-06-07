@@ -23,6 +23,21 @@ namespace My
             return result;
         }
 
+        public static IList<double> flatBarsCount(this ISecurity sec, IList<double> uCh1, IList<double> uCh2, IList<double> dCh1, IList<double> dCh2)
+        {
+            var result = new List<double>();
+            result.Add(0);
+
+            for (int i = 1; i < uCh1.Count; i++)
+            {
+                if (sec.Bars[i].Close <= uCh2[i] && sec.Bars[i].Close >= dCh2[i])
+                    result.Add(result[i - 1] + 1);
+                else
+                    result.Add(0);
+            }
+            return result;            
+        }
+
         public static bool isInTimeSpan(this TimeSpan time, TimeSpan timeMin, TimeSpan timeMax)
         {
             return time >= timeMin && time <= timeMax;

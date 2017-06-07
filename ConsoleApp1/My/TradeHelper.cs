@@ -267,10 +267,10 @@ namespace My
             var counter = 0;
             for (var i = 0; i < list0.Count; i++)
             {
-                counter += Math.Abs((int) crossings[i]);
-                
+                counter += Math.Abs((int)crossings[i]);
+
                 if (i >= period)
-                    counter -= Math.Abs((int)crossings[i-period]);
+                    counter -= Math.Abs((int)crossings[i - period]);
 
                 result[i] = counter;
             }
@@ -693,10 +693,10 @@ namespace My
         {
             // Задаем цвет соообщения
             var color = System.Drawing.Color.Blue;
-            
+
             // Формируем строку, вставляем спец слово Info.
             var msg = string.Format("Info: " + str, args);
-            
+
             ctx.Log(msg, new Color(color.ToArgb()));
         }
 
@@ -865,8 +865,8 @@ namespace My
                              && (entryDate.TimeOfDay.InRange(dayClearingTime, eveningClearingTime)
                              && (exitDate.TimeOfDay.InRange(dayClearingTime, eveningClearingTime)))
 
-                            // Если сделка была открыта и закрыта в между вечерним и дневным клирингом следующего дня
-                // Если не попала сделка между дневным и вечерним клиром, тогда она попала между вечерним и дневным.
+                          // Если сделка была открыта и закрыта в между вечерним и дневным клирингом следующего дня
+                          // Если не попала сделка между дневным и вечерним клиром, тогда она попала между вечерним и дневным.
                           || (entryDate.Date == exitDate.Date - TimeSpan.FromDays(1))
                              && (entryDate.TimeOfDay.InRange(dayClearingTime, eveningClearingTime) == false
                                && (exitDate.TimeOfDay.InRange(dayClearingTime, eveningClearingTime) == false));
@@ -894,7 +894,7 @@ namespace My
             var totalPrice = positions.Sum(p => p.PositionEntryPrice());
             var totalSize = positions.Sum(p => p.PosSize());
 
-            return totalPrice/totalSize;
+            return totalPrice / totalSize;
         }
 
         /// <summary>
@@ -925,7 +925,7 @@ namespace My
         /// <returns></returns>
         public static double LotPrice(this ISecurity sec, int i)
         {
-            return sec.ClosePrices[i]*sec.LotSize;
+            return sec.ClosePrices[i] * sec.LotSize;
         }
 
         #endregion
@@ -1034,7 +1034,7 @@ namespace My
         /// <returns></returns>
         public static bool IsEven(this int i)
         {
-            return i%2 == 0;
+            return i % 2 == 0;
         }
 
         /// <summary>
@@ -1044,7 +1044,7 @@ namespace My
         /// <returns></returns>
         public static bool IsOdd(this int i)
         {
-            return i%2 != 0;
+            return i % 2 != 0;
         }
 
         #endregion
@@ -1066,7 +1066,7 @@ namespace My
             if (bar < pos.EntryBarNum)
                 throw new ArgumentOutOfRangeException("bar", "номер бара должен быть меньше чем бар открытия позиции.");
 
-            if (k <=0)
+            if (k <= 0)
                 throw new ArgumentOutOfRangeException("k", "k должен быть положительным числом.");
 
             if (delta < 0)
@@ -1074,7 +1074,7 @@ namespace My
 
             if (step <= 0)
                 throw new ArgumentOutOfRangeException("step", "step должен быть положительным числом.");
-            
+
             var x = bar - pos.EntryBarNum + 1;      // Время удержания позиции
             var y = x * x * k;
 
@@ -1105,7 +1105,7 @@ namespace My
             var diff = currentDate - openDate;
 
             return (diff >= time);
-        } 
+        }
         #endregion
     }
 }

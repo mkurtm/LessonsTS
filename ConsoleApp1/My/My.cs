@@ -19,6 +19,7 @@ namespace My
         public OptimProperty smaPeriodSmall = new OptimProperty(20, 10, 100, 5);
         public OptimProperty smaPeriodBig = new OptimProperty(220, 100, 500, 10);
         public OptimProperty smaPeriodHuge = new OptimProperty(3120, 2000, 5000, 50);
+
         public OptimProperty atrPeriod = new OptimProperty(20, 10, 100, 5);
         public OptimProperty uCh6Delta = new OptimProperty(6, 0, 10, 0.1);
         public OptimProperty dCh6Delta = new OptimProperty(-6, -10, 0, 0.1);
@@ -28,8 +29,11 @@ namespace My
         public OptimProperty dCh1Delta = new OptimProperty(-1.33, -10, 0, 0.1);
         public OptimProperty uCh0Delta = new OptimProperty(0.33, 0, 10, 0.1);
         public OptimProperty dCh0Delta = new OptimProperty(-0.33, -10, 0, 0.1);
+
         public OptimProperty deltaPcntMT = new OptimProperty(1, 0, 5, 0.25);
         public OptimProperty takePcnt = new OptimProperty(1, 0, 30, 0.25);
+
+        public OptimProperty barsAgo = new OptimProperty(5, 0, 30, 1);
 
         #endregion
 
@@ -63,15 +67,41 @@ namespace My
             var dCh0 = ctx.GetData("dch0", new string[] { },
                 () => MyHelper.KeltnerChanel(smaSmall, atr, dCh0Delta));
 
+            var cross = ctx.GetData("cross", new string[] { },
+                () => sec.IsCrossSmaBarsAgoAll(smaSmall, barsAgo));
+
             #endregion
 
             #region Checks & Setups
 
+            //Выдаем ошибку если не базовый таймфрейм
             if (sec.IntervalInstance != new Interval(5, DataIntervals.MINUTE))
                 throw new ArgumentException("Работаем только на 5 мин.");
 
-            var comiss = new AbsolutCommission() { Commission = (10 + (double)sec.Tick * 6.0) };
-            comiss.Execute(sec);
+            //Индивидуальная комиссия
+            var comiss = new AbsolutCommission() { Commission = 0 };
+            switch (sec.Symbol)
+            {
+                case "SPFB.SBER":
+                    comiss = new AbsolutCommission() { Commission = (2 + (double)sec.Tick * 4.0) };
+                    comiss.Execute(sec);
+                    break;
+                case "SPFB.RTS":
+                    comiss = new AbsolutCommission() { Commission = (5 + (double)sec.Tick * 4.0) };
+                    comiss.Execute(sec);
+                    break;
+                case "SPFB.SI":
+                    comiss = new AbsolutCommission() { Commission = (2 + (double)sec.Tick * 4.0) };
+                    comiss.Execute(sec);
+                    break;
+                default:
+                    throw new Exception("Комиссия для данного инструмента не задана.");
+                    break;
+            }
+
+            //Последняя позиция
+            var timeLastHnd = new LastClosedPositionExitTime();
+            var dateLastHnd = new LastClosedPositionExitDate();  
 
             #endregion
 
@@ -79,32 +109,25 @@ namespace My
 
             for (int i = 0; i < ctx.BarsCount; i++)
             {
+
+                //Необходимые сущности для работы
+
+                var timeLast = timeLastHnd.Execute(sec, i);
+                var dateLast = dateLastHnd.Execute(sec, i);
+
                 var se = sec.Positions.GetLastActiveForSignal("SE");
-                var le = sec.Positions.GetLastActiveForSignal("LE");
-
-                //if (se == null)
-                //{
-                //    if ((sec.isUnderSMA(smaHuge,i) || sec.isUnderSMA(smaBig, i)) 
-                //        && sec.isNearSMA(smaBig,i,deltaPcntMT))
-                //    {
-                //        if (sec.Bars[i].Close < smaSmall[i] && sec.Bars[i].Open > smaSmall[i])
-                //        {
-                //            sec.Positions.SellAtMarket(i + 1, 1, "SE");
-                //        }
-                //    }
-                //}
-
-                //else
-                //{
-                //    se.CloseAtStop(i + 1, uCh2[i] > se.EntryPrice ? uCh2[i] : se.EntryPrice, "SX");
-                //    se.CloseAtProfit(i + 1, se.EntryPrice*(1-(takePcnt/100.0)), "SP");
-                //}
-
-
+                var le = sec.Positions.GetLastActiveForSignal("LE");                                     
+                
                 if (le == null)
                 {
-                    if ((sec.isAboveSMA(smaHuge, i) || sec.isAboveSMA(smaBig, i)) &&
-                        sec.isNearSMA(smaBig, i, deltaPcntMT))
+                    if (
+                       
+
+                        (sec.isAboveSMA(smaHuge, i) || sec.isAboveSMA(smaBig, i)) &&
+                        sec.isNearSMA(smaBig, i, deltaPcntMT)
+                        
+                        
+                        )
                     {
                         if (sec.Bars[i].Close > smaSmall[i] && sec.Bars[i].Open < smaSmall[i])
                         {
@@ -116,7 +139,7 @@ namespace My
                 else
                 {
                     le.CloseAtStop(i + 1, dCh2[i] < le.EntryPrice ? dCh2[i] : le.EntryPrice, "LX");
-                    le.CloseAtProfit(i + 1, le.EntryPrice*(1 + (takePcnt/100.0)), "LP");
+                    le.CloseAtProfit(i + 1, le.EntryPrice * (1 + (takePcnt / 100.0)), "LP");
                 }
             }
 
@@ -171,6 +194,11 @@ namespace My
             pane.HideLegend = true;
             color = new Color(System.Drawing.Color.Red.ToArgb());
             lst = pane.AddList("vol", "11", atr, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+
+            pane = ctx.CreateGraphPane("cross", "cross", false);
+            pane.HideLegend = true;
+            color = new Color(System.Drawing.Color.Red.ToArgb());
+            lst = pane.AddList("vol", "11", cross, ListStyles.HISTOHRAM, color, LineStyles.SOLID, PaneSides.RIGHT);
 
             #endregion
         }

@@ -58,6 +58,7 @@ namespace My
             var dCh2 = smaSmall.KeltnerChanel(atr, dCh2Delta);
             var dCh1 = smaSmall.KeltnerChanel(atr, dCh1Delta);
             var dCh0 = smaSmall.KeltnerChanel(atr, dCh0Delta);
+            var barsAbove = sec.barsAboveSma(dCh2);
 
             #endregion
 
@@ -92,8 +93,8 @@ namespace My
             var stopShort = 0.0;
             var stopLong = 0.0;
 
-                //flat
-           // var flatBarsCount = sec.flatBarsCount(uCh1, uCh2, dCh1, dCh2);
+            //flat
+            // var flatBarsCount = sec.flatBarsCount(uCh1, uCh2, dCh1, dCh2);
 
             #endregion
 
@@ -112,7 +113,9 @@ namespace My
                 if (se == null)
 
                 {
-                    if (sec.isCrossSmaDown(smaSmall, i))
+                    if (sec.isCrossSmaDown(smaSmall, i) &&
+                        barsAbove[i]>=4.0
+                        )
                     {
                         sec.Positions.SellAtMarket(i + 1, 1, "SE");
                         stopShort = uCh0[i];
@@ -125,24 +128,33 @@ namespace My
                 {
                     se.CloseAtStop(i + 1, uCh1[i] > se.EntryPrice ? uCh1[i] : stopShort, "SX");
                     //se.CloseAtStop(i + 1, stopShort, "SX");
-                    se.CloseAtProfit(i + 1, (se.EntryPrice * (1 - (takePcntShort / 100.0))), "SP");
-                }
+                    //se.CloseAtProfit(i + 1, (se.EntryPrice * (1 - (takePcntShort / 100.0))), "SP");
 
-                if (le == null)
-                {
-                    if (sec.isCrossSmaUp(smaSmall, i))
+                    if (i - se.EntryBarNum >=20)
                     {
-                        sec.Positions.BuyAtMarket(i + 1, 1, "LE");
-                        stopLong = dCh0[i];
+                        se.CloseAtMarket(i + 1, "STX","asdsad");
                     }
                 }
 
-                else
-                {
-                    le.CloseAtStop(i + 1, dCh1[i] < le.EntryPrice ? dCh1[i] : stopLong, "LX");
-                    //le.CloseAtStop(i + 1, stopLong, "LX");
-                    le.CloseAtProfit(i + 1, le.EntryPrice * (1 + (takePcntLong / 100.0)), "LP");
-                }
+
+
+               
+
+                //if (le == null)
+                //{
+                //    if (sec.isCrossSmaUp(smaSmall, i))
+                //    {
+                //        sec.Positions.BuyAtMarket(i + 1, 1, "LE");
+                //        stopLong = dCh0[i];
+                //    }
+                //}
+
+                //else
+                //{
+                //    le.CloseAtStop(i + 1, dCh1[i] < le.EntryPrice ? dCh1[i] : stopLong, "LX");
+                //    //le.CloseAtStop(i + 1, stopLong, "LX");
+                //    le.CloseAtProfit(i + 1, le.EntryPrice * (1 + (takePcntLong / 100.0)), "LP");
+                //}
             }
 
             #endregion
@@ -155,7 +167,7 @@ namespace My
             }
 
             var pane = ctx.CreateGraphPane("main", "aaa", false);
-            pane.HideLegend = true;
+            pane.HideLegend = false;
             var color = new Color(System.Drawing.Color.Green.ToArgb());
             var lst = pane.AddList(sec.ToString(), "sec", sec, CandleStyles.BAR_CANDLE, color, PaneSides.RIGHT);
             lst.AlternativeColor = System.Drawing.Color.Red.ToArgb();
@@ -201,6 +213,11 @@ namespace My
             //pane.HideLegend = true;
             //color = new Color(System.Drawing.Color.Red.ToArgb());
             //lst = pane.AddList("vol", "11", flatBarsCount, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+
+            pane = ctx.CreateGraphPane("atr", "atr", false);
+            pane.HideLegend = true;
+            color = new Color(System.Drawing.Color.Red.ToArgb());
+            lst = pane.AddList("vol", "11", barsAbove, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
 
             #endregion
         }

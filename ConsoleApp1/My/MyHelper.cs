@@ -152,7 +152,21 @@ namespace My
 
         }
 
-
+        public static List<double> barsAboveSma(this ISecurity sec, IList<double> sma)
+        {
+            var list = new List<double>();
+            list.Add(0);
+            var barsAbove = 0;
+            for (int i = 1; i < sec.Bars.Count; i++)
+            {
+                if (sec.isAboveSMA(sma, i))
+                    barsAbove++;
+                else
+                    barsAbove = 0;
+                list.Add(barsAbove);
+            }
+            return list;
+        }
 
         public static IList<bool> isCrossSmaAll(this ISecurity sec, IList<double> sma)
         {

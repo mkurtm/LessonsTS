@@ -77,10 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cross1m.cs" />
     <Compile Include="Cross.cs" />
     <Compile Include="My.cs" />
     <Compile Include="MyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Real.cs" />
     <Compile Include="TradeHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

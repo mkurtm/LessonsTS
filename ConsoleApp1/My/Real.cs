@@ -32,8 +32,8 @@ namespace My
         public OptimProperty dCh1Delta = new OptimProperty(-1.2, -10, 0, 0.1);
         public OptimProperty dCh0Delta = new OptimProperty(-0.15, -10, 0, 0.1);
 
-        public OptimProperty takePcntShort = new OptimProperty(0.5, 0, 30, 0.25);
-        public OptimProperty takePcntLong = new OptimProperty(0.5, 0, 30, 0.25);
+        public OptimProperty takePcntShort = new OptimProperty(0.25, 0, 30, 0.25);
+        public OptimProperty takePcntLong = new OptimProperty(0.25, 0, 30, 0.25);
 
         //Stop
         static double stopShort = 0.0;
@@ -55,7 +55,7 @@ namespace My
             var dCh6 = smaSmall.KeltnerChanel(atr, dCh6Delta);
             var dCh2 = smaSmall.KeltnerChanel(atr, dCh2Delta);
             var dCh1 = smaSmall.KeltnerChanel(atr, dCh1Delta);
-            var dCh0 = smaSmall.KeltnerChanel(atr, dCh0Delta);            
+            var dCh0 = smaSmall.KeltnerChanel(atr, dCh0Delta);
 
             #endregion
 
@@ -73,14 +73,8 @@ namespace My
             {
                 //Позиции
 
-                var se = sec.Positions.GetLastActiveForSignal("SE");
-                var le = sec.Positions.GetLastActiveForSignal("LE");
-
-                if (se!=null)
-                {
-                    stopShort = sec.Bars[se.EntryBarNum-1].High + 20;
-                }
-
+                var se = sec.Positions.GetLastActiveForSignal("SE", i);
+                var le = sec.Positions.GetLastActiveForSignal("LE", i);
 
                 //Торговля   
 
@@ -89,49 +83,40 @@ namespace My
                 {
                     if (sec.Bars[i].Close < sec.Bars[i].Open)
                     {
-                        //sec.Positions.SellAtMarket(i + 1, 1, "SE", null);
-                        //stopShort = uCh0[i];
-                        //sec.Positions.SellAtPrice(i + 1, 1, (sec.Bars[i].Close - 50), "SE", null);
-                        //stopShort = sec.Bars[i].High + 20;
-
-                        // stopShort = uCh1[i];
-                        // stopShort = smaSmall[i];
+                        sec.Positions.SellAtPrice(i + 1, 1, (sec.Bars[i].Close - 100), "SE", null);
+                        stopShort = sec.Bars[i].High + 50;
                     }
                 }
                 else
                 {
-                    //se.CloseAtStop(i + 1, uCh1[i] > se.EntryPrice ? uCh1[i] : stopShort, "SX");
-                    se.CloseAtStop(i + 1, stopShort, "SX");                   
-                    //se.CloseAtProfit(i + 1, (se.EntryPrice * (1 - (takePcntShort / 100.0))), "SP");
+                    se.CloseAtStop(i + 1, stopShort, 100, "SX");
+                    se.CloseAtProfit(i + 1, (se.EntryPrice * (1 - (takePcntShort / 100.0))), "SP");
 
-                    //if (i - se.EntryBarNum >= 2)
-                    //{
-                    //    se.CloseAtMarket(i + 1, "STX", "asdsad");
-                    //}
+                    if (i - se.EntryBarNum >= 2)
+                    {
+                        se.CloseAtPrice(i + 1, sec.Bars[i].Close + 500, "STime", null);
+                    }
                 }
 
-                //if (le == null)
-                //{
-                //    if (sec.Bars[i].Close > sec.Bars[i].Open)
-                //    {
-                //        //sec.Positions.BuyAtMarket(i + 1, 1, "LE", null);
-                //        //stopLong = dCh0[i];
-                //        sec.Positions.BuyAtPrice(i + 1, 1, (sec.Bars[i].Close + 50), "LE", null);
-                //        stopLong = sec.Bars[i].Low - 20;
-                //    }
-                //}
+                if (le == null)
+                {
+                    if (sec.Bars[i].Close > sec.Bars[i].Open)
+                    {
+                        sec.Positions.BuyAtPrice(i + 1, 1, (sec.Bars[i].Close + 100), "LE", null);
+                        stopLong = sec.Bars[i].Low - 50;
+                    }
+                }
 
-                //else
-                //{
-                //    //le.CloseAtStop(i + 1, dCh1[i] < le.EntryPrice ? dCh1[i] : stopLong, "LX");
-                //    le.CloseAtStop(i + 1, stopLong, "LX");                 
-                //    le.CloseAtProfit(i + 1, le.EntryPrice * (1 + (takePcntLong / 100.0)), "LP");
+                else
+                {
+                    le.CloseAtStop(i + 1, stopLong, 100, "LX");
+                    le.CloseAtProfit(i + 1, le.EntryPrice * (1 + (takePcntLong / 100.0)), "LP");
 
-                //    if (i - le.EntryBarNum >= 2)
-                //    {
-                //        le.CloseAtMarket(i + 1, "LTX", "asdsad");
-                //    }
-                //}
+                    if (i - le.EntryBarNum >= 2)
+                    {
+                        le.CloseAtPrice(i + 1, sec.Bars[i].Close - 500, "LTime", null);
+                    }
+                }
             }
 
             #endregion

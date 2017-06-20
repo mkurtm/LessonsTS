@@ -17,17 +17,18 @@ namespace My
         #region Parameters
 
         public OptimProperty smaPeriodSmall = new OptimProperty(20, 10, 100, 5);
-        public OptimProperty smaPeriodBig = new OptimProperty(100, 100, 500, 10);
+        //Если нужна оптимизация
+        //public OptimProperty smaPeriodBig = new OptimProperty(100, 100, 500, 10);
 
         public OptimProperty atrPeriod = new OptimProperty(20, 10, 100, 5);
 
         public OptimProperty uCh6Delta = new OptimProperty(6, 0, 10, 0.1);
         public OptimProperty uCh2Delta = new OptimProperty(2.33, 0, 10, 0.1);
-        public OptimProperty uCh1Delta = new OptimProperty(1, 0.0, 10.0, 0.1);
+        public OptimProperty uCh1Delta = new OptimProperty(1.33, 0.0, 10.0, 0.1);
         public OptimProperty uCh0Delta = new OptimProperty(0.25, 0, 10, 0.1);
 
-        public OptimProperty dCh0Delta = new OptimProperty(-0.15, -10, 0, 0.1);
-        public OptimProperty dCh1Delta = new OptimProperty(-1.2, -10, 0, 0.1);
+        public OptimProperty dCh0Delta = new OptimProperty(-0.25, -10, 0, 0.1);
+        public OptimProperty dCh1Delta = new OptimProperty(-1.33, -10, 0, 0.1);
         public OptimProperty dCh2Delta = new OptimProperty(-2.33, -10, 0, 0.1);
         public OptimProperty dCh6Delta = new OptimProperty(-6, -10, 0, 0.1);
 
@@ -45,8 +46,28 @@ namespace My
         {
             #region Indicators            
 
-            var smaSmall = Series.SMA(sec.ClosePrices, smaPeriodSmall);
+            var colorSMAbig = new Color();
+            var colorSMAsmall = new Color();
+            var smaPeriodBig = 0;
+            if (sec.IntervalInstance == new Interval(1, DataIntervals.MINUTE))
+            {
+                smaPeriodBig = 100;
+                colorSMAbig = new Color(System.Drawing.Color.White.ToArgb());
+                colorSMAsmall = new Color(System.Drawing.Color.Orange.ToArgb());
+            }
+            else if (sec.IntervalInstance == new Interval(5, DataIntervals.MINUTE))
+            {
+                smaPeriodBig = 220;
+                colorSMAbig = new Color(System.Drawing.Color.CornflowerBlue.ToArgb());
+                colorSMAsmall = new Color(System.Drawing.Color.White.ToArgb());
+            }
+            else
+            {
+                throw new ArgumentException("Не работаю на этом таймфрейме.");
+            }
+
             var smaBig = Series.SMA(sec.ClosePrices, smaPeriodBig);
+            var smaSmall = Series.SMA(sec.ClosePrices, smaPeriodSmall);
             var atr = Series.AverageTrueRange(sec.Bars, atrPeriod);
             var uCh6 = smaSmall.KeltnerChanel(atr, uCh6Delta);
             var uCh2 = smaSmall.KeltnerChanel(atr, uCh2Delta);
@@ -56,14 +77,6 @@ namespace My
             var dCh2 = smaSmall.KeltnerChanel(atr, dCh2Delta);
             var dCh1 = smaSmall.KeltnerChanel(atr, dCh1Delta);
             var dCh0 = smaSmall.KeltnerChanel(atr, dCh0Delta);
-
-            #endregion
-
-            #region Checks & Setups
-
-            //Выдаем ошибку если не базовый таймфрейм
-            if (sec.IntervalInstance != new Interval(1, DataIntervals.MINUTE))
-                throw new ArgumentException("Работаем только на 1 мин.");
 
             #endregion
 
@@ -113,16 +126,12 @@ namespace My
             }
 
             var pane = ctx.CreateGraphPane("main", "main", false);
-            pane.HideLegend = false;
             var color = new Color(System.Drawing.Color.Green.ToArgb());
             var lst = pane.AddList(sec.ToString(), "sec", sec, CandleStyles.BAR_CANDLE, color, PaneSides.RIGHT);
             lst.AlternativeColor = System.Drawing.Color.Red.ToArgb();
 
-            color = new Color(System.Drawing.Color.White.ToArgb());
-            lst = pane.AddList(sec.ToString(), "smaSmall", smaSmall, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
-
-            color = new Color(System.Drawing.Color.CornflowerBlue.ToArgb());
-            lst = pane.AddList(sec.ToString(), "smaBig", smaBig, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+            lst = pane.AddList(sec.ToString(), "smaSmall", smaSmall, ListStyles.LINE, colorSMAsmall, LineStyles.SOLID, PaneSides.RIGHT);
+            lst = pane.AddList(sec.ToString(), "smaBig", smaBig, ListStyles.LINE, colorSMAbig, LineStyles.SOLID, PaneSides.RIGHT);
             lst.Thickness = 2;
 
             color = new Color(System.Drawing.Color.Red.ToArgb());

@@ -32,15 +32,17 @@ namespace My
         public OptimProperty dCh2Delta = new OptimProperty(-2.33, -10, 0, 0.1);
         public OptimProperty dCh6Delta = new OptimProperty(-6, -10, 0, 0.1);
 
-        public OptimProperty takePcntShort = new OptimProperty(0.5, 0, 30, 0.25);
+        public OptimProperty takePcntShort = new OptimProperty(1, 0, 30, 0.25);
         public OptimProperty takePcntLong = new OptimProperty(0.5, 0, 30, 0.25);
+
+        //public OptimProperty numShortPoses = new OptimProperty(3, 1, 20, 1);
+        //public OptimProperty numLongPoses = new OptimProperty(3, 1, 20, 1);
 
         //Stops
 
         static double stopShort = 0.0;
         static double stopLong = 0.0;
-
-
+        
         #endregion
 
         public void Execute(IContext ctx, ISecurity sec)
@@ -84,54 +86,75 @@ namespace My
             #region Setups
 
             //Setups
-            int numShortPoses = 3;
-            int numLongPoses = 3;
+            bool workShort = true;
+            int numShortPoses =5;
+
+            bool workLong = true;
+            int numLongPoses = 5;
+
             double slippage = sec.Tick * 20;
-
-            var lePoses = new List<IPosition>();
-            var sePoses = new List<IPosition>();
-
+            
             #endregion
 
             #region Trading
 
-            for (int i = 1; i < ctx.BarsCount; i++)
+            for (int i = smaPeriodBig; i < ctx.BarsCount; i++)
             {
-                bool wasShortEntryThisBar = false;
+                var lePoses = new List<IPosition>();
                 bool wasLongEntryThisBar = false;
+                var lastLongEntryBar = 0;
+                var lastLongEntryPrice = 0.0;
 
-                //Позиции
-                //lePoses = sec.Positions.GetActiveForBar(i).Where(p => p.EntrySignalName.StartsWith("LE")).ToList();
-                //sePoses = sec.Positions.GetActiveForBar(i).Where(p => p.EntrySignalName.StartsWith("SE")).ToList();
+                var sePoses = new List<IPosition>();
+                bool wasShortEntryThisBar = false;
+                var lastShortEntryBar = 0;
+                var lastShortEntryPrice = 0.0;
 
                 for (int j = 0; j < numShortPoses; j++)
                 {
                     sePoses.Add(sec.Positions.GetLastActiveForSignal("SE" + j, i));
+                    if (sePoses[j] != null)
+                    {
+                        lastShortEntryBar = sePoses[j].EntryBarNum;
+                        lastShortEntryPrice = sePoses[j].EntryPrice;
+                    }
                 }
-
-                //var se = sec.Positions.GetLastActiveForSignal("SE", i);
-                //var le = sec.Positions.GetLastActiveForSignal("LE", i);
 
                 //Торговля   
-
-                for (int j = 0; j < numShortPoses; j++)
-                {
-                    if (sePoses[j] == null)
+                if (workShort)
+                    for (int j = 0; j < numShortPoses; j++)
                     {
-                        if (!wasShortEntryThisBar &&
-                            sec.Bars[i].Close < smaSmall[i] &&
-                            sec.Bars[i - 1].Close > smaSmall[i - 1])
+                        if (sePoses[j] == null)
                         {
-                            sec.Positions.SellAtPrice(i + 1, 1, sec.Bars[i].Close - slippage, "SE" + j, null);
-                            wasShortEntryThisBar = true;
+                            if (j == 0)
+                            {
+                                if (!wasShortEntryThisBar &&
+                                    sec.Bars[i].Close < smaSmall[i] &&
+                                    sec.Bars[i - 1].Close > smaSmall[i - 1])
+                                {
+                                    sec.Positions.SellAtPrice(i + 1, 1, sec.Bars[i].Close - slippage, "SE" + j, null);
+                                    wasShortEntryThisBar = true;
+                                }
+                            }
+                            else
+                            {
+                                if (!wasShortEntryThisBar &&
+                                    sec.Bars[i].Close < smaSmall[i] &&
+                                    sec.Bars[i - 1].Close > smaSmall[i - 1] &&
+                                    (lastShortEntryPrice - sec.Bars[i].Close) > 2 * atr[i]) 
+                                {
+                                    sec.Positions.SellAtPrice(i + 1, 1, sec.Bars[i].Close - slippage, "SE" + j, null);
+                                    wasShortEntryThisBar = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var stopLoss = sePoses[j].EntryPrice < uCh1[i] ? uCh1[i] : sePoses[j].EntryPrice;
+                            sePoses[j].CloseAtStop(i + 1, stopLoss, "SX" + j, null);
+                            //sePoses[j].CloseAtProfit(i + 1, (sePoses[j].EntryPrice * (1-(takePcntShort/100.0))),"ST"+j);
                         }
                     }
-                    else
-                    {
-                        var stopLoss = sePoses[j].EntryPrice < uCh1[i] ? uCh1[i] : sePoses[j].EntryPrice;
-                        sePoses[j].CloseAtStop(i + 1, stopLoss, "SX" + j, null);
-                    }
-                }
 
 
 

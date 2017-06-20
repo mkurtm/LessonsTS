@@ -220,7 +220,9 @@ namespace My
             // Формируем строку, вставляем спец слово Info.
             var msg = string.Format("Info: " + str, args);
 
-            ctx.Log(msg, new Color(color.ToArgb()));
+            //ctx.Log(msg, new Color(color.ToArgb()));
+            ctx.Log(msg, MessageType.Warning, false, null);
+            
         }
     }
 }

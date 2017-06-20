@@ -40,6 +40,7 @@ namespace My
         static double stopShort = 0.0;
         static double stopLong = 0.0;
 
+
         #endregion
 
         public void Execute(IContext ctx, ISecurity sec)
@@ -80,40 +81,72 @@ namespace My
 
             #endregion
 
+            #region Setups
+
+            //Setups
+            int numShortPoses = 3;
+            int numLongPoses = 3;
+            double slippage = sec.Tick * 20;
+
+            var lePoses = new List<IPosition>();
+            var sePoses = new List<IPosition>();
+
+            #endregion
+
             #region Trading
 
             for (int i = 1; i < ctx.BarsCount; i++)
             {
-                //Позиции
+                bool wasShortEntryThisBar = false;
+                bool wasLongEntryThisBar = false;
 
-                var se = sec.Positions.GetLastActiveForSignal("SE", i);
-                var le = sec.Positions.GetLastActiveForSignal("LE", i);
+                //Позиции
+                //lePoses = sec.Positions.GetActiveForBar(i).Where(p => p.EntrySignalName.StartsWith("LE")).ToList();
+                //sePoses = sec.Positions.GetActiveForBar(i).Where(p => p.EntrySignalName.StartsWith("SE")).ToList();
+
+                for (int j = 0; j < numShortPoses; j++)
+                {
+                    sePoses.Add(sec.Positions.GetLastActiveForSignal("SE" + j, i));
+                }
+
+                //var se = sec.Positions.GetLastActiveForSignal("SE", i);
+                //var le = sec.Positions.GetLastActiveForSignal("LE", i);
 
                 //Торговля   
 
-                if (se == null)
+                for (int j = 0; j < numShortPoses; j++)
                 {
-                    if (true)
+                    if (sePoses[j] == null)
                     {
-                        
+                        if (!wasShortEntryThisBar &&
+                            sec.Bars[i].Close < smaSmall[i] &&
+                            sec.Bars[i - 1].Close > smaSmall[i - 1])
+                        {
+                            sec.Positions.SellAtPrice(i + 1, 1, sec.Bars[i].Close - slippage, "SE" + j, null);
+                            wasShortEntryThisBar = true;
+                        }
+                    }
+                    else
+                    {
+                        var stopLoss = sePoses[j].EntryPrice < uCh1[i] ? uCh1[i] : sePoses[j].EntryPrice;
+                        sePoses[j].CloseAtStop(i + 1, stopLoss, "SX" + j, null);
                     }
                 }
-                else
-                {
-                 
-                }
 
-                if (le == null)
-                {
-                    if (true)
-                    {
 
-                    }
-                }
-                else
-                {
 
-                }
+
+                //if (le == null)
+                //{
+                //    if (true)
+                //    {
+
+                //    }
+                //}
+                //else
+                //{
+
+                //}
             }
 
             #endregion
@@ -167,5 +200,6 @@ namespace My
 
             #endregion
         }
+
     }
 }

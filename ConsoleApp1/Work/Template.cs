@@ -182,10 +182,27 @@ namespace Work
                 // Общие условия. Определяю ключевые условия стратегии через делегаты
                 //-------------
 
+                Conditions isGoodBar = () =>
+                {
+                    var candleBody = Math.Abs(sec.Bars[i].Open - sec.Bars[i].Close);
+                    var candleTails = sec.Bars[i].High - sec.Bars[i].Low - candleBody;
+                    return
+                        candleBody >= 0.5 * atr[i] &&   // Тело бара входа больше N * ATR
+                        candleTails <= 5 * atr[i];      // Хвост бара меньше N * ATR
+                };
+
+                Conditions isGoodTime = () =>
+                {
+                    return
+                        sec.Bars[i].Date.TimeOfDay.Hours < 22 &&                // Вход до N часов
+                        sec.Bars[i].Date.TimeOfDay > new TimeSpan(10, 10, 00);  // Вход после N времени
+                };
+
                 Conditions isNormalSituation = () =>
                 {
                     return
-                        Math.Abs(sec.Bars[i].Open - sec.Bars[i].Close) >= 0.5 * atr[i];     // Бар входа больше определенного размера
+                        isGoodBar() &&
+                        isGoodTime();
                 };
 
                 //-------------
@@ -201,9 +218,13 @@ namespace Work
 
                 Conditions isShortCanAdd = () =>
                 {
+                    var priceSpread = lastShortEntryPrice - sec.Bars[i].Close;
+                    var timeSpread = (i - lastShortEntryBar);
+
                     return
                         !wasShortEntryThisBar &&                                //Не было входов на этом баре
-                        (lastShortEntryPrice - sec.Bars[i].Close) > 2 * atr[i]; //Цена ушла больше, чем на 2 АТР
+                        priceSpread > 2 * atr[i] &&                             //Цена ушла больше, чем на N * АТР
+                        timeSpread > 5;                                         // Прошло больше N баров
                 };
 
                 Conditions isShortAllGood = () =>
@@ -226,9 +247,13 @@ namespace Work
 
                 Conditions isLongCanAdd = () =>
                 {
+                    var priceSpread = sec.Bars[i].Close - lastLongEntryPrice;
+                    var timeSpread = i - lastLongEntryBar;
+
                     return
-                        !wasLongEntryThisBar &&                                 //Не было входов на этом баре
-                        (sec.Bars[i].Close - lastLongEntryPrice) > 2 * atr[i];  //Цена ушла больше, чем на 2 АТР
+                        !wasLongEntryThisBar &&                                 // Не было входов на этом баре
+                        priceSpread > 2 * atr[i] &&                             // Цена ушла больше, чем на N * АТР
+                        timeSpread > 5;                                         // Прошло больше N баров
                 };
 
                 Conditions isLongAllGood = () =>

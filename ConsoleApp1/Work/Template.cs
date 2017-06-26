@@ -13,17 +13,21 @@ namespace Work
 {
     public class Template : IExternalScript
     {
-        public delegate bool Conditions();
 
         #region Optimized Parameters & Static things
+
+        //-------------
+        // Создаю делегат для работы с Условиями
+        //-------------
+
+        public delegate bool Conditions();
 
         //-------------
         //Набор оптимизируемых параметров
         //-------------
 
         public OptimProperty smaPeriodSmall = new OptimProperty(20, 10, 100, 5);
-        //Если нужна оптимизация
-        //public OptimProperty smaPeriodBig = new OptimProperty(100, 100, 500, 10);
+        //public OptimProperty smaPeriodBig = new OptimProperty(100, 100, 500, 10);        //Если нужна оптимизация
 
         public OptimProperty atrPeriod = new OptimProperty(20, 10, 100, 5);
 
@@ -40,8 +44,8 @@ namespace Work
         public OptimProperty takePcntShort = new OptimProperty(2, 0, 30, 0.25);
         public OptimProperty takePcntLong = new OptimProperty(2, 0, 30, 0.25);
 
-        //public OptimProperty numShortPoses = new OptimProperty(3, 1, 20, 1);
-        //public OptimProperty numLongPoses = new OptimProperty(3, 1, 20, 1);
+        //public OptimProperty numShortPosesOpt = new OptimProperty(5, 1, 20, 1);       //Оптимизирую на этапе тестирования
+        //public OptimProperty numLongPosesOpt = new OptimProperty(5, 1, 20, 1);
 
         //-------------
         //Инициализируем Stops, статичные, чтобы сохранялись между пересчетами скрипта.
@@ -54,6 +58,31 @@ namespace Work
 
         public void Execute(IContext ctx, ISecurity sec)
         {
+
+            #region Script Setups
+
+            //-------------
+            //Настройки для Шорта
+            //-------------
+
+            bool workShort = true;
+            int numShortPoses = 5;
+
+            //-------------
+            //Натсройки для Лонга
+            //-------------
+
+            bool workLong = true;
+            int numLongPoses = 5;
+
+            //-------------
+            //Общие настройки
+            //-------------
+
+            double slippage = sec.Tick * 20;
+
+            #endregion
+
             #region Indicators            
 
             //-------------
@@ -98,34 +127,12 @@ namespace Work
 
             #endregion
 
-            #region Script Setups
-
-            //-------------
-            //Настройки для Шорта
-            //-------------
-
-            bool workShort = true;
-            int numShortPoses = 5;
-
-            //-------------
-            //Натсройки для Лонга
-            //-------------
-
-            bool workLong = true;
-            int numLongPoses = 5;
-
-            //-------------
-            //Общие настройки
-            //-------------
-
-            double slippage = sec.Tick * 20;
-
-            #endregion
-
-            #region Trading
+            #region Trading Cycle
 
             for (int i = smaPeriodBig; i < ctx.BarsCount; i++)
             {
+
+                #region Positionlist Initialization
 
                 //-------------
                 // Создаю списки Лонг и Шорт позиций, а также переменные для
@@ -167,42 +174,73 @@ namespace Work
                     }
                 }
 
+                #endregion
+
+                #region Conditions and Filters
+
                 //-------------
-                // Шорт. Определяю ключевые моменты стратегии через делегаты
+                // Общие условия. Определяю ключевые условия стратегии через делегаты
+                //-------------
+
+                Conditions isNormalSituation = () =>
+                {
+                    return
+                        Math.Abs(sec.Bars[i].Open - sec.Bars[i].Close) >= 0.5 * atr[i];     // Бар входа больше определенного размера
+                };
+
+                //-------------
+                // Шорт. Определяю ключевые условия стратегии через делегаты
                 //-------------
 
                 Conditions isShortEntryPoint = () =>
                 {
                     return
                         sec.Bars[i].Close < smaSmall[i] &&
-                        sec.Bars[i - 1].Close > smaSmall[i - 1];
+                        sec.Bars[i - 1].Close > smaSmall[i - 1];                // Пересекли скользящую
                 };
 
-                Conditions isShortConditionsForAdd = () =>
+                Conditions isShortCanAdd = () =>
                 {
                     return
-                        !wasShortEntryThisBar &&
-                        (lastShortEntryPrice - sec.Bars[i].Close) > 2 * atr[i];
+                        !wasShortEntryThisBar &&                                //Не было входов на этом баре
+                        (lastShortEntryPrice - sec.Bars[i].Close) > 2 * atr[i]; //Цена ушла больше, чем на 2 АТР
+                };
+
+                Conditions isShortAllGood = () =>
+                {
+                    return
+                        isShortEntryPoint() &&
+                        isNormalSituation();
                 };
 
                 //-------------
-                // Лонг. Определяю ключевые моменты стратегии через делегаты
+                // Лонг. Определяю ключевые условия стратегии через делегаты
                 //-------------
 
                 Conditions isLongEntryPoint = () =>
                 {
                     return
                         sec.Bars[i].Close < smaSmall[i] &&
-                        sec.Bars[i - 1].Close > smaSmall[i - 1];
+                        sec.Bars[i - 1].Close > smaSmall[i - 1];                // Пересекли скользящую
                 };
 
-                Conditions isLongConditionsForAdd = () =>
+                Conditions isLongCanAdd = () =>
                 {
                     return
-                        !wasLongEntryThisBar &&
-                        (sec.Bars[i].Close - lastLongEntryPrice) > 2 * atr[i];
+                        !wasLongEntryThisBar &&                                 //Не было входов на этом баре
+                        (sec.Bars[i].Close - lastLongEntryPrice) > 2 * atr[i];  //Цена ушла больше, чем на 2 АТР
                 };
 
+                Conditions isLongAllGood = () =>
+                {
+                    return
+                        isLongEntryPoint() &&
+                        isNormalSituation();
+                };
+
+                #endregion
+
+                #region Trades Execution
 
                 //-------------
                 // Шорт. Торговая логика 
@@ -216,7 +254,7 @@ namespace Work
                             if (j == 0)                       // Если первая позиция, то проверка такая
                             {
                                 if (
-                                    isShortEntryPoint()
+                                    isShortAllGood()
                                     )
                                 {
                                     sec.Positions.SellAtPrice(i + 1, 1, sec.Bars[i].Close - slippage, "SE" + j, null);
@@ -226,8 +264,8 @@ namespace Work
                             else                               // Если позиция не первая, то проверка такая
                             {
                                 if (
-                                    isShortEntryPoint() &&
-                                    isShortConditionsForAdd()
+                                    isShortAllGood() &&
+                                    isShortCanAdd()
                                     )
                                 {
                                     sec.Positions.SellAtPrice(i + 1, 1, sec.Bars[i].Close - slippage, "SE" + j, null);
@@ -256,7 +294,7 @@ namespace Work
                             if (j == 0)                             // Если первая позиция, то проверка такая
                             {
                                 if (
-                                    isLongEntryPoint()
+                                    isLongAllGood()
                                     )
                                 {
                                     sec.Positions.BuyAtPrice(i + 1, 1, sec.Bars[i].Close + slippage, "LE" + j, null);
@@ -266,8 +304,8 @@ namespace Work
                             else                                    // Если позиция не первая, то проверка такая
                             {
                                 if (
-                                    isLongEntryPoint() &&
-                                    isLongConditionsForAdd()
+                                    isLongAllGood() &&
+                                    isLongCanAdd()
                                     )
                                 {
                                     sec.Positions.BuyAtPrice(i + 1, 1, sec.Bars[i].Close + slippage, "LE" + j, null);
@@ -283,6 +321,8 @@ namespace Work
                             lePoses[j].CloseAtProfit(i + 1, (lePoses[j].EntryPrice * (1 + (takePcntLong / 100.0))), "LT" + j);
                         }
                     }
+
+                #endregion
             }
 
             #endregion

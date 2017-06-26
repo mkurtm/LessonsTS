@@ -187,7 +187,7 @@ namespace Work
                     var candleBody = Math.Abs(sec.Bars[i].Open - sec.Bars[i].Close);
                     var candleTails = sec.Bars[i].High - sec.Bars[i].Low - candleBody;
                     return
-                        candleBody >= 0.5 * atr[i] &&   // Тело бара входа больше N * ATR
+                        candleBody >= 0.2 * atr[i] &&   // Тело бара входа больше N * ATR
                         candleTails <= 5 * atr[i];      // Хвост бара меньше N * ATR
                 };
 
@@ -241,8 +241,8 @@ namespace Work
                 Conditions isLongEntryPoint = () =>
                 {
                     return
-                        sec.Bars[i].Close < smaSmall[i] &&
-                        sec.Bars[i - 1].Close > smaSmall[i - 1];                // Пересекли скользящую
+                        sec.Bars[i].Close > smaSmall[i] &&
+                        sec.Bars[i - 1].Close < smaSmall[i - 1];                // Пересекли скользящую
                 };
 
                 Conditions isLongCanAdd = () =>

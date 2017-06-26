@@ -9,12 +9,16 @@ using TSLab.Script.Handlers;
 using TSLab.Script.Helpers;
 using TSLab.Script.Optimization;
 
-namespace My
+namespace Work
 {
     public class Template : IExternalScript
     {
 
-        #region Parameters
+        #region Optimized Parameters & Static things
+
+        //-------------
+        //Набор оптимизируемых параметров
+        //-------------
 
         public OptimProperty smaPeriodSmall = new OptimProperty(20, 10, 100, 5);
         //Если нужна оптимизация
@@ -38,16 +42,24 @@ namespace My
         //public OptimProperty numShortPoses = new OptimProperty(3, 1, 20, 1);
         //public OptimProperty numLongPoses = new OptimProperty(3, 1, 20, 1);
 
-        //Stops
+        //-------------
+        //Инициализируем Stops, статичные, чтобы сохранялись между пересчетами скрипта.
+        //-------------
 
         static double stopShort = 0.0;
         static double stopLong = 0.0;
         
         #endregion
 
+
+
         public void Execute(IContext ctx, ISecurity sec)
         {
             #region Indicators            
+
+            //-------------
+            //Меняем Цвет и период скользящих в зависимости от выбранного таймфрема.
+            //-------------
 
             var colorSMAbig = new Color();
             var colorSMAsmall = new Color();
@@ -68,6 +80,10 @@ namespace My
             {
                 throw new ArgumentException("Не работаю на этом таймфрейме.");
             }
+            
+            //-------------
+            //Создаем все используемые индикаторы
+            //-------------
 
             var smaBig = Series.SMA(sec.ClosePrices, smaPeriodBig);
             var smaSmall = Series.SMA(sec.ClosePrices, smaPeriodSmall);
@@ -83,14 +99,25 @@ namespace My
 
             #endregion
 
-            #region Setups
+            #region Script Setups
 
-            //Setups
+            //-------------
+            //Настройки для Шорта
+            //-------------
+            
             bool workShort = true;
             int numShortPoses =5;
 
+            //-------------
+            //Натсройки для Лонга
+            //-------------
+
             bool workLong = true;
             int numLongPoses = 5;
+
+            //-------------
+            //Общие настройки
+            //-------------
 
             double slippage = sec.Tick * 20;
             
@@ -176,10 +203,18 @@ namespace My
 
             #region Drawing
 
+            //-------------
+            // Нет отрисовки, если в режиме оптимизации
+            //-------------
+            
             if (ctx.IsOptimization)
             {
                 return;
             }
+
+            //-------------
+            // Отрисовка графика и скользящих
+            //-------------
 
             var pane = ctx.CreateGraphPane("main", "main", false);
             var color = new Color(System.Drawing.Color.Green.ToArgb());
@@ -189,6 +224,10 @@ namespace My
             lst = pane.AddList(sec.ToString(), "smaSmall", smaSmall, ListStyles.LINE, colorSMAsmall, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(sec.ToString(), "smaBig", smaBig, ListStyles.LINE, colorSMAbig, LineStyles.SOLID, PaneSides.RIGHT);
             lst.Thickness = 2;
+
+            //-------------
+            // Отрисовка каналов Кельтнера
+            //-------------
 
             color = new Color(System.Drawing.Color.Red.ToArgb());
             lst = pane.AddList(sec.ToString(), "K", uCh6, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
@@ -205,6 +244,10 @@ namespace My
             color = new Color(System.Drawing.Color.Gold.ToArgb());
             lst = pane.AddList(sec.ToString(), "K", uCh0, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
             lst = pane.AddList(sec.ToString(), "K", dCh0, ListStyles.LINE, color, LineStyles.SOLID, PaneSides.RIGHT);
+
+            //-------------
+            // Вспомогательные или тестовые панели
+            //-------------
 
             //pane = ctx.CreateGraphPane("vol", "v", false);
             //pane.HideLegend = true;

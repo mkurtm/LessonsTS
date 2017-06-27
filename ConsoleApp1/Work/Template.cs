@@ -49,6 +49,8 @@ namespace Work
 
         public OptimProperty timeOpt = new OptimProperty(100000, 100000, 235000, 500);  // Для оптимизации временных рамок
 
+        public OptimProperty Q = new OptimProperty(0.75, 0, 1, 0.05);                     // Параметр - помощник
+        
         //-------------
         //Инициализируем Stops, статичные, чтобы сохранялись между пересчетами скрипта.
         //-------------
@@ -197,9 +199,13 @@ namespace Work
                 {
                     var candleBody = Math.Abs(sec.Bars[i].Open - sec.Bars[i].Close);
                     var candleTails = sec.Bars[i].High - sec.Bars[i].Low - candleBody;
+                    var firstHalfCandle = Math.Abs( sec.Bars[i].Open - smaSmall[i]);
+                    var secondHalfCandle = Math.Abs( sec.Bars[i].Close - smaSmall[i]);
+
                     return
-                        candleBody >= 0.2 * atr[i] &&   // Тело бара входа больше N * ATR
-                        candleTails <= 5 * atr[i];      // Хвост бара меньше N * ATR
+                        candleBody >= 0.4 * atr[i] &&   // Тело бара входа больше N * ATR
+                        candleTails <= 5 * atr[i] &&      // Хвост бара меньше N * ATR
+                        Math.Abs(firstHalfCandle - secondHalfCandle) / candleBody < 0.85;  // Бар пересекает скользящую ровно
                 };
 
                 Conditions isGoodTime = () =>

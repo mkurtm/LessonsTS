@@ -263,7 +263,7 @@ namespace Work
 
                     return
                         !wasLongEntryThisBar &&                                 // Не было входов на этом баре
-                        priceSpread > 2 * atr[i] &&                             // Цена ушла больше, чем на N * АТР
+                        priceSpread > 3 * atr[i] &&                             // Цена ушла больше, чем на N * АТР
                         timeSpread > 5;                                         // Прошло больше N баров
                 };
 

@@ -44,8 +44,10 @@ namespace Work
         public OptimProperty takePcntShort = new OptimProperty(2, 0, 30, 0.25);
         public OptimProperty takePcntLong = new OptimProperty(2, 0, 30, 0.25);
 
-        //public OptimProperty numShortPosesOpt = new OptimProperty(5, 1, 20, 1);       //Оптимизирую на этапе тестирования
+        //public OptimProperty numShortPosesOpt = new OptimProperty(5, 1, 20, 1);       // Оптимизирую на этапе тестирования
         //public OptimProperty numLongPosesOpt = new OptimProperty(5, 1, 20, 1);
+
+        public OptimProperty timeOpt = new OptimProperty(100000, 100000, 235000, 500);  // Для оптимизации временных рамок
 
         //-------------
         //Инициализируем Stops, статичные, чтобы сохранялись между пересчетами скрипта.
@@ -83,7 +85,7 @@ namespace Work
 
             #endregion
 
-            #region Indicators            
+            #region Indicators & Handlers            
 
             //-------------
             //Меняем Цвет и период скользящих в зависимости от выбранного таймфрема.
@@ -124,6 +126,15 @@ namespace Work
             var dCh2 = smaSmall.KeltnerChanel(atr, dCh2Delta);
             var dCh1 = smaSmall.KeltnerChanel(atr, dCh1Delta);
             var dCh0 = smaSmall.KeltnerChanel(atr, dCh0Delta);
+
+            var timeHandler = new Time() { };
+            var time = timeHandler.Execute(sec);
+
+            //-------------
+            // Учитываем комиссию
+            //-------------
+            //var commis = new AbsolutCommission() { Commission = 20 };
+            //commis.Execute(sec);
 
             #endregion
 
@@ -194,8 +205,8 @@ namespace Work
                 Conditions isGoodTime = () =>
                 {
                     return
-                        sec.Bars[i].Date.TimeOfDay.Hours < 22 &&                // Вход до N часов
-                        sec.Bars[i].Date.TimeOfDay > new TimeSpan(10, 10, 00);  // Вход после N времени
+                        (time[i] > 100500 && time[i] < 141500) ||  // Диапазон 1
+                        (time[i] > 155000 && time[i] < 190000);    // Диапазон 2              
                 };
 
                 Conditions isNormalSituation = () =>
@@ -340,8 +351,8 @@ namespace Work
                         }
                         else                                        // Если позиция открыта - выставляю стоп и тейк
                         {
-                            var takeProfit = lePoses[j].EntryPrice > dCh1[i] ? dCh1[i] : lePoses[j].EntryPrice;
-                            lePoses[j].CloseAtStop(i + 1, takeProfit, "LX" + j, null);
+                            var stopLoss = lePoses[j].EntryPrice > dCh1[i] ? dCh1[i] : lePoses[j].EntryPrice;
+                            lePoses[j].CloseAtStop(i + 1, stopLoss, "LX" + j, null);
 
                             lePoses[j].CloseAtProfit(i + 1, (lePoses[j].EntryPrice * (1 + (takePcntLong / 100.0))), "LT" + j);
                         }
@@ -417,6 +428,5 @@ namespace Work
 
             #endregion
         }
-
     }
 }

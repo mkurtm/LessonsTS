@@ -153,7 +153,7 @@ namespace Work
                 var sePoses = new List<IPosition>();
                 bool wasShortEntryThisBar = false;
                 var lastShortEntryBar = 0;
-                var lastShortEntryPrice = 0.0;
+                var lastShortEntryPrice = 1000000.0;
 
                 var lePoses = new List<IPosition>();
                 bool wasLongEntryThisBar = false;
@@ -170,8 +170,8 @@ namespace Work
                     sePoses.Add(sec.Positions.GetLastActiveForSignal("SE" + j, i));
                     if (sePoses[j] != null)
                     {
-                        lastShortEntryBar = sePoses[j].EntryBarNum;
-                        lastShortEntryPrice = sePoses[j].EntryPrice;
+                        lastShortEntryBar = lastShortEntryBar > sePoses[j].EntryBarNum ? lastShortEntryBar : sePoses[j].EntryBarNum;
+                        lastShortEntryPrice = lastShortEntryPrice < sePoses[j].EntryPrice ? lastShortEntryPrice : sePoses[j].EntryPrice;
                     }
                 }
 
@@ -180,8 +180,8 @@ namespace Work
                     lePoses.Add(sec.Positions.GetLastActiveForSignal("LE" + j, i));
                     if (lePoses[j] != null)
                     {
-                        lastLongEntryBar = lePoses[j].EntryBarNum;
-                        lastLongEntryPrice = lePoses[j].EntryPrice;
+                        lastLongEntryBar = lastLongEntryBar > lePoses[j].EntryBarNum ? lastLongEntryBar : lePoses[j].EntryBarNum;
+                        lastLongEntryPrice = lastLongEntryPrice > lePoses[j].EntryPrice ? lastLongEntryPrice : lePoses[j].EntryPrice;
                     }
                 }
 
@@ -330,7 +330,7 @@ namespace Work
                             if (j == 0)                             // Если первая позиция, то проверка такая
                             {
                                 if (
-                                    isLongAllGood()
+                                    isLongAllGood() 
                                     )
                                 {
                                     sec.Positions.BuyAtPrice(i + 1, 1, sec.Bars[i].Close + slippage, "LE" + j, null);
